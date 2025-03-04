@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-lacussoft",
+  "name": "eslint-config-jlm",
   "version": "2.4.0",
   "description": "Base ESLint configuration for JavaScript, TypeScript, React, React Native & Vue projects, by LacusSoft",
   "license": "MIT",
