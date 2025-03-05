@@ -1,15 +1,15 @@
-import pluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
-import pluginJs from '@eslint/js';
-import configPrettier from 'eslint-config-prettier';
-import pluginArrayFunc from 'eslint-plugin-array-func';
-import pluginImport from 'eslint-plugin-import';
-import pluginImportHelpers from 'eslint-plugin-import-helpers';
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
-import pluginNoSecrets from 'eslint-plugin-no-secrets';
-import pluginPerfectionist from 'eslint-plugin-perfectionist';
-import pluginReact from 'eslint-plugin-react';
-import pluginReactHook from 'eslint-plugin-react-hooks';
-import pluginRegexp from 'eslint-plugin-regexp';
+import eslintCommentsPlugin from '@eslint-community/eslint-plugin-eslint-comments';
+import jsPlugin from '@eslint/js';
+import arrayFuncPlugin from 'eslint-plugin-array-func';
+import importPlugin from 'eslint-plugin-import';
+import importHelpersPlugin from 'eslint-plugin-import-helpers';
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import noSecretsPlugin from 'eslint-plugin-no-secrets';
+import perfectionistPlugin from 'eslint-plugin-perfectionist';
+import prettierConfigAndPlugin from 'eslint-plugin-prettier/recommended';
+import reactPlugin from 'eslint-plugin-react';
+import reactHookPlugin from 'eslint-plugin-react-hooks';
+import regexpPlugin from 'eslint-plugin-regexp';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
@@ -32,7 +32,7 @@ export default [
       sourceType: 'commonjs',
     },
   },
-  pluginJs.configs.recommended,
+  jsPlugin.configs.recommended,
 
   // TypeScript
   {
@@ -62,10 +62,10 @@ export default [
       },
     },
     plugins: {
-      '@eslint-community/eslint-comments': pluginEslintComments,
-      'jsx-a11y': pluginJsxA11y,
-      react: pluginReact,
-      'react-hooks': pluginReactHook,
+      '@eslint-community/eslint-comments': eslintCommentsPlugin,
+      'jsx-a11y': jsxA11yPlugin,
+      react: reactPlugin,
+      'react-hooks': reactHookPlugin,
     },
   },
 
@@ -79,12 +79,12 @@ export default [
       },
     },
     plugins: {
-      'array-func': pluginArrayFunc,
-      import: pluginImport,
-      'import-helpers': pluginImportHelpers,
-      'no-secrets': pluginNoSecrets,
-      perfectionist: pluginPerfectionist,
-      regexp: pluginRegexp,
+      'array-func': arrayFuncPlugin,
+      import: importPlugin,
+      'import-helpers': importHelpersPlugin,
+      'no-secrets': noSecretsPlugin,
+      perfectionist: perfectionistPlugin,
+      regexp: regexpPlugin,
     },
     rules: {
       'import-helpers/order-imports': [
@@ -122,5 +122,16 @@ export default [
   },
 
   // Prettier
-  configPrettier,
+  prettierConfigAndPlugin,
+  {
+    rules: {
+      'prettier/prettier': [
+        'warn',
+        {
+          printWidth: 100,
+          singleQuote: true,
+        },
+      ],
+    },
+  },
 ];
