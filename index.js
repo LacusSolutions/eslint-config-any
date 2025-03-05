@@ -13,24 +13,21 @@ import regexpPlugin from 'eslint-plugin-regexp';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
+/**
+ * @typedef {import('eslint').Linter.Config[]} EslintFlatConfig
+ *
+ * @typedef {Object} EslintFlatConfigPresets
+ * @property {EslintFlatConfig} browser
+ * @property {EslintFlatConfig} browserAndNode
+ * @property {EslintFlatConfig} node
+ * @property {EslintFlatConfig} nodeAndBrowser
+ * @property {EslintFlatConfig} commonjs
+ */
+
+/** @type {EslintFlatConfigPresets} */
+const sharedConfig = [
   {
     ignores: [],
-  },
-  {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
-  },
-  {
-    files: ['**/*.js'],
-    languageOptions: {
-      sourceType: 'commonjs',
-    },
   },
   jsPlugin.configs.recommended,
 
@@ -135,3 +132,47 @@ export default [
     },
   },
 ];
+
+const browserAndNodeEnv = [
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  ...sharedConfig,
+];
+
+/** @type {EslintFlatConfigPresets} */
+export default {
+  browser: [
+    {
+      languageOptions: {
+        globals: globals.browser,
+      },
+    },
+    ...sharedConfig,
+  ],
+  browserAndNode: browserAndNodeEnv,
+  node: [
+    {
+      languageOptions: {
+        globals: {
+          ...globals.node,
+        },
+      },
+    },
+    ...sharedConfig,
+  ],
+  nodeAndBrowser: browserAndNodeEnv,
+  commonjs: [
+    {
+      files: ['**/*.js'],
+      languageOptions: {
+        sourceType: 'commonjs',
+      },
+    },
+  ],
+};
