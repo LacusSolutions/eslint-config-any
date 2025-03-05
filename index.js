@@ -10,6 +10,7 @@ import prettierConfigAndPlugin from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
 import reactHookPlugin from 'eslint-plugin-react-hooks';
 import regexpPlugin from 'eslint-plugin-regexp';
+import vuePlugin from 'eslint-plugin-vue';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
@@ -33,7 +34,7 @@ const sharedConfig = [
 
   // TypeScript
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx,vue}'],
     languageOptions: {
       parser: tsEslint.parser,
       parserOptions: {
@@ -59,16 +60,23 @@ const sharedConfig = [
       },
     },
     plugins: {
-      '@eslint-community/eslint-comments': eslintCommentsPlugin,
       'jsx-a11y': jsxA11yPlugin,
       react: reactPlugin,
       'react-hooks': reactHookPlugin,
     },
   },
 
+  // Vue
+  {
+    files: ['**/*.vue'],
+    plugins: {
+      vue: vuePlugin,
+    },
+  },
+
   // All
   {
-    files: ['**/*.{js,jsx,cjs,mjs,ts,tsx}'],
+    files: ['**/*.{js,jsx,cjs,mjs,ts,tsx,vue}'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
@@ -76,6 +84,7 @@ const sharedConfig = [
       },
     },
     plugins: {
+      '@eslint-community/eslint-comments': eslintCommentsPlugin,
       'array-func': arrayFuncPlugin,
       import: importPlugin,
       'import-helpers': importHelpersPlugin,
