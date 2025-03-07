@@ -6,7 +6,6 @@ import importHelpersPlugin from 'eslint-plugin-import-helpers';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import noSecretsPlugin from 'eslint-plugin-no-secrets';
 import perfectionistPlugin from 'eslint-plugin-perfectionist';
-import prettierConfigAndPlugin from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
 import reactHookPlugin from 'eslint-plugin-react-hooks';
 import regexpPlugin from 'eslint-plugin-regexp';
@@ -14,6 +13,7 @@ import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
 import envConfig from './env/index.js';
+import prettierConfig from './prettier/index.js';
 import vueConfig from './vue/index.js';
 
 /**
@@ -124,22 +124,8 @@ function mergeConfigs(configs) {
       },
     },
 
-    // Custom configs
     ...configs,
-
-    // Prettier
-    prettierConfigAndPlugin,
-    {
-      rules: {
-        'prettier/prettier': [
-          'warn',
-          {
-            printWidth: 100,
-            singleQuote: true,
-          },
-        ],
-      },
-    },
+    ...prettierConfig,
   ];
 }
 
