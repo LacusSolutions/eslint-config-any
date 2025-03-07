@@ -13,7 +13,7 @@ import regexpPlugin from 'eslint-plugin-regexp';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
-import commonjsConfig from './commonjs/index.js';
+import envConfig from './env/index.js';
 import vueConfig from './vue/index.js';
 
 /**
@@ -22,7 +22,7 @@ import vueConfig from './vue/index.js';
  * @typedef {Object} EslintFlatConfigSetup
  * @property {EslintFlatConfig} node
  * @property {EslintFlatConfig} browser
- * @property {EslintFlatConfig} nodeAndBrowser
+ * @property {EslintFlatConfig} sharedNodeAndBrowser
  * @property {EslintFlatConfig} commonjs
  * @property {EslintFlatConfig} vue
  * @property {EslintFlatConfig} vue2
@@ -145,32 +145,10 @@ function mergeConfigs(configs) {
 
 /** @type {EslintFlatConfigSetup} */
 export default {
-  node: mergeConfigs([
-    {
-      languageOptions: {
-        globals: {
-          ...globals.node,
-        },
-      },
-    },
-  ]),
-  browser: mergeConfigs([
-    {
-      languageOptions: {
-        globals: globals.browser,
-      },
-    },
-  ]),
-  nodeAndBrowser: mergeConfigs([
-    {
-      languageOptions: {
-        globals: {
-          ...globals['shared-node-browser'],
-        },
-      },
-    },
-  ]),
-  commonjs: mergeConfigs(commonjsConfig),
+  node: mergeConfigs(envConfig.node),
+  browser: mergeConfigs(envConfig.browser),
+  sharedNodeAndBrowser: mergeConfigs(envConfig.sharedNodeAndBrowser),
+  commonjs: mergeConfigs(envConfig.commonjs),
   vue: mergeConfigs(vueConfig.vue3),
   vue2: mergeConfigs(vueConfig.vue2),
 };
