@@ -1,4 +1,4 @@
-import standardRules from '../../standard/rules/index.js';
+import standardRules from '../../base/rules/index.js';
 
 export default {
   // https://typescript-eslint.io/rules/no-unused-vars
