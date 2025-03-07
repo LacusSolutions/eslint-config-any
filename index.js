@@ -10,31 +10,32 @@ import prettierConfigAndPlugin from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
 import reactHookPlugin from 'eslint-plugin-react-hooks';
 import regexpPlugin from 'eslint-plugin-regexp';
-import vuePlugin from 'eslint-plugin-vue';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
+
+import vueConfig from './vue/index.js';
 
 /**
  * @typedef {import('eslint').Linter.Config[]} EslintFlatConfig
  *
  * @typedef {Object} EslintFlatConfigPresets
- * @property {EslintFlatConfig} browser
- * @property {EslintFlatConfig} browserAndNode
  * @property {EslintFlatConfig} node
+ * @property {EslintFlatConfig} browser
  * @property {EslintFlatConfig} nodeAndBrowser
  * @property {EslintFlatConfig} commonjs
+ * @property {EslintFlatConfig} vue2
  */
 
 /** @type {EslintFlatConfigPresets} */
 const sharedConfig = [
   {
-    ignores: [],
+    ignores: ['**/coverage/**', '**/build/**', '**/dist/**', '**/*.min.js'],
   },
   jsPlugin.configs.recommended,
 
   // TypeScript
   {
-    files: ['**/*.{ts,tsx,vue}'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsEslint.parser,
       parserOptions: {
@@ -67,12 +68,7 @@ const sharedConfig = [
   },
 
   // Vue
-  {
-    files: ['**/*.vue'],
-    plugins: {
-      vue: vuePlugin,
-    },
-  },
+  ...vueConfig.vue3,
 
   // All
   {
@@ -142,29 +138,8 @@ const sharedConfig = [
   },
 ];
 
-const browserAndNodeEnv = [
-  {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
-  },
-  ...sharedConfig,
-];
-
 /** @type {EslintFlatConfigPresets} */
 export default {
-  browser: [
-    {
-      languageOptions: {
-        globals: globals.browser,
-      },
-    },
-    ...sharedConfig,
-  ],
-  browserAndNode: browserAndNodeEnv,
   node: [
     {
       languageOptions: {
@@ -175,13 +150,31 @@ export default {
     },
     ...sharedConfig,
   ],
-  nodeAndBrowser: browserAndNodeEnv,
+  browser: [
+    {
+      languageOptions: {
+        globals: globals.browser,
+      },
+    },
+    ...sharedConfig,
+  ],
+  nodeAndBrowser: [
+    {
+      languageOptions: {
+        globals: {
+          ...globals['shared-node-browser'],
+        },
+      },
+    },
+    ...sharedConfig,
+  ],
   commonjs: [
     {
-      files: ['**/*.js'],
+      files: ['**/*.{js,cjs}'],
       languageOptions: {
         sourceType: 'commonjs',
       },
     },
   ],
+  vue2: vueConfig.vue2,
 };

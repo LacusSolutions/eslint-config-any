@@ -1,19 +1,14 @@
-const rules = require('./rules')
+import vuePlugin from 'eslint-plugin-vue';
 
-module.exports = {
-  env: {
-    'node': true,
-    'vue/setup-compiler-macros': true,
+import config from '../shared/index.js';
+import rules from './rules/index.js';
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  ...vuePlugin.configs['flat/recommended'],
+  ...config,
+  {
+    files: ['**/*.vue'],
+    rules,
   },
-  extends: [
-    'plugin:vue/vue3-essential',
-  ],
-  parserOptions: {
-    sourceType: 'module',
-    ecmaVersion: 2021,
-  },
-  plugins: [
-    'vue', // https://eslint.vuejs.org/
-  ],
-  rules,
-}
+];
