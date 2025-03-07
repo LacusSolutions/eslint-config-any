@@ -1,8 +1,6 @@
-const requirePlugins = require('../../utils/require-plugins')
-const pluginsRules = requirePlugins(`${__dirname}/plugins`)
-const overrides = require('./overrides')
+import standardRules from '../../standard/rules/index.js';
 
-module.exports = {
-  ...pluginsRules,
-  ...overrides, // <<< MUST BE THE LAST ONE
-}
+export default {
+  // https://typescript-eslint.io/rules/no-unused-vars
+  '@typescript-eslint/no-unused-vars': standardRules['no-unused-vars'],
+};

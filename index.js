@@ -6,11 +6,11 @@ import importHelpersPlugin from 'eslint-plugin-import-helpers';
 import noSecretsPlugin from 'eslint-plugin-no-secrets';
 import perfectionistPlugin from 'eslint-plugin-perfectionist';
 import regexpPlugin from 'eslint-plugin-regexp';
-import tsEslint from 'typescript-eslint';
 
 import envConfig from './env/index.js';
 import prettierConfig from './prettier/index.js';
 import reactConfig from './react/index.js';
+import tsConfig from './typescript/index.js';
 import vueConfig from './vue/index.js';
 
 /**
@@ -27,17 +27,17 @@ import vueConfig from './vue/index.js';
  */
 
 /**
- * @param {EslintFlatConfig} configs
+ * @param {EslintFlatConfig} otherConfigs
  * @return {EslintFlatConfig}
  */
-function mergeConfigs(configs) {
+function mergeConfigs(otherConfigs) {
   return [
     {
       ignores: ['**/coverage/**', '**/build/**', '**/dist/**', '**/*.min.js'],
     },
     jsPlugin.configs.recommended,
     {
-      files: ['**/*.{js,jsx,cjs,mjs,ts,tsx,vue}'],
+      files: ['**/*.{js,jsx,mjsx,cjs,mjs,ts,tsx,mtsx,vue}'],
       languageOptions: {
         parserOptions: {
           ecmaVersion: 'latest',
@@ -88,21 +88,8 @@ function mergeConfigs(configs) {
       },
     },
 
-    // TypeScript
-    {
-      files: ['**/*.{ts,tsx}'],
-      languageOptions: {
-        parser: tsEslint.parser,
-        parserOptions: {
-          project: ['tsconfig.json', 'tsconfig.node.json'],
-        },
-      },
-      plugins: {
-        '@typescript-eslint': tsEslint.plugin,
-      },
-    },
-
-    ...configs,
+    ...tsConfig,
+    ...otherConfigs,
     ...prettierConfig,
   ];
 }

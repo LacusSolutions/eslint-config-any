@@ -5,10 +5,10 @@ import globals from 'globals';
 
 import rules from './rules/index.js';
 
+const matchingFilesPattern = ['**/*.{js,jsx,mjsx,ts,tsx,mtsx}'];
 const baseReactConfig = reactPlugin.configs.flat.recommended;
 const baseReactHooksConfig = reactHooksPlugin.configs['recommended-latest'];
 const baseJsxA11yConfig = jsxA11yPlugin.flatConfigs.recommended;
-const matchingFilesPattern = ['**/*.{js,jsx,mjsx,ts,tsx,mtsx}'];
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [

@@ -1,16 +1,26 @@
-const rules = require('./rules')
+import tsEslint from 'typescript-eslint';
 
-module.exports = {
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-  ],
-  parserOptions: {
-    parser: '@typescript-eslint/parser',
-    sourceType: 'module',
-    ecmaVersion: 2021,
+import rules from './rules/index.js';
+
+const matchingFilesPattern = ['**/*.{ts,tsx,mtsx,vue}'];
+const baseTypeScriptConfig = tsEslint.configs.recommended;
+const baseStylisticConfigRules = tsEslint.configs.stylistic.at(-1)?.rules ?? {};
+const stylisticRules = Object.keys(baseStylisticConfigRules).reduce((acc, rule) => {
+  acc[rule] = 'warn';
+  return acc;
+}, {});
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  {
+    ...baseTypeScriptConfig,
+    files: matchingFilesPattern,
   },
-  plugins: [
-    '@typescript-eslint', // https://github.com/typescript-eslint/typescript-eslint
-  ],
-  rules,
-}
+  {
+    files: matchingFilesPattern,
+    rules: {
+      ...stylisticRules,
+      ...rules,
+    },
+  },
+];
