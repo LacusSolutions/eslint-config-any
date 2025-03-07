@@ -1,25 +1,34 @@
-const rules = require('./rules')
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
-module.exports = {
-  extends: [
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  parserOptions: {
-    sourceType: 'module',
-    ecmaVersion: 2021,
-    ecmaFeatures: {
-      jsx: true,
-    },
+import rules from './rules/index.js';
+
+const baseReactConfig = reactPlugin.configs.flat.recommended;
+const baseReactHooksConfig = reactHooksPlugin.configs['recommended-latest'];
+const baseJsxA11yConfig = jsxA11yPlugin.flatConfigs.recommended;
+const matchingFilesPattern = ['**/*.{js,jsx,mjsx,ts,tsx,mtsx}'];
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  {
+    ...baseReactConfig,
+    files: matchingFilesPattern,
   },
-  plugins: [
-    'react',                  // https://github.com/yannickcr/eslint-plugin-react
-    'react-hooks',            // https://www.npmjs.com/package/eslint-plugin-react-hooks
-  ],
-  rules,
-  settings: {
-    react: {
-      version: 'detect',
-    },
+  {
+    ...baseReactHooksConfig,
+    files: matchingFilesPattern,
   },
-}
+  {
+    ...baseJsxA11yConfig,
+    files: matchingFilesPattern,
+  },
+  {
+    files: matchingFilesPattern,
+    languageOptions: {
+      globals: globals.browser,
+    },
+    rules,
+  },
+];

@@ -3,17 +3,14 @@ import jsPlugin from '@eslint/js';
 import arrayFuncPlugin from 'eslint-plugin-array-func';
 import importPlugin from 'eslint-plugin-import';
 import importHelpersPlugin from 'eslint-plugin-import-helpers';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import noSecretsPlugin from 'eslint-plugin-no-secrets';
 import perfectionistPlugin from 'eslint-plugin-perfectionist';
-import reactPlugin from 'eslint-plugin-react';
-import reactHookPlugin from 'eslint-plugin-react-hooks';
 import regexpPlugin from 'eslint-plugin-regexp';
-import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
 import envConfig from './env/index.js';
 import prettierConfig from './prettier/index.js';
+import reactConfig from './react/index.js';
 import vueConfig from './vue/index.js';
 
 /**
@@ -24,6 +21,7 @@ import vueConfig from './vue/index.js';
  * @property {EslintFlatConfig} browser
  * @property {EslintFlatConfig} sharedNodeAndBrowser
  * @property {EslintFlatConfig} commonjs
+ * @property {EslintFlatConfig} react
  * @property {EslintFlatConfig} vue
  * @property {EslintFlatConfig} vue2
  */
@@ -104,26 +102,6 @@ function mergeConfigs(configs) {
       },
     },
 
-    // React
-    {
-      files: ['**/*.{jsx,tsx}'],
-      languageOptions: {
-        globals: {
-          ...globals.browser,
-        },
-        parserOptions: {
-          ecmaFeatures: {
-            jsx: true,
-          },
-        },
-      },
-      plugins: {
-        'jsx-a11y': jsxA11yPlugin,
-        react: reactPlugin,
-        'react-hooks': reactHookPlugin,
-      },
-    },
-
     ...configs,
     ...prettierConfig,
   ];
@@ -135,6 +113,7 @@ export default {
   browser: mergeConfigs(envConfig.browser),
   sharedNodeAndBrowser: mergeConfigs(envConfig.sharedNodeAndBrowser),
   commonjs: mergeConfigs(envConfig.commonjs),
+  react: mergeConfigs(reactConfig),
   vue: mergeConfigs(vueConfig.vue3),
   vue2: mergeConfigs(vueConfig.vue2),
 };
