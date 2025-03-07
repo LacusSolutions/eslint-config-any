@@ -35,7 +35,8 @@
     "lint": "eslint ----fix ."
   },
   "peerDependencies": {
-    "eslint": ">=9.21.0"
+    "eslint": ">=9.21.0",
+    "typescript ": ">=5.8.0"
   },
   "dependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.4.1",
@@ -55,8 +56,8 @@
     "typescript-eslint": "^8.26.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.7.1",
-    "@commitlint/config-conventional": "^19.7.1",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@types/node": "^22.13.9",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
