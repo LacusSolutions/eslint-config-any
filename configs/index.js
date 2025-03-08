@@ -28,10 +28,10 @@ function mergeConfigs(otherConfigs) {
 
 /** @type {EslintFlatConfigSetup} */
 export default {
+  commonjs: envConfigs.commonjs,
   node: mergeConfigs(envConfigs.node),
   browser: mergeConfigs(envConfigs.browser),
   sharedNodeAndBrowser: mergeConfigs(envConfigs.sharedNodeAndBrowser),
-  commonjs: mergeConfigs(envConfigs.commonjs),
   react: mergeConfigs(reactConfigs),
   vue: mergeConfigs(vueConfigs.vue3),
   vue2: mergeConfigs(vueConfigs.vue2),
