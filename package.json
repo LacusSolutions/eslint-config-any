@@ -28,7 +28,7 @@
     "node": ">=22"
   },
   "type": "module",
-  "main": "index.js",
+  "main": "configs/index.js",
   "scripts": {
     "prepare": "husky",
     "commit": "git-cz",

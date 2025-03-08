@@ -1,3 +1,3 @@
-import jlmConfig from './index.js';
+import jlmConfig from './configs/index.js';
 
 export default jlmConfig.node;
