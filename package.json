@@ -35,12 +35,12 @@
     "lint": "eslint ----fix ."
   },
   "peerDependencies": {
-    "eslint": ">=9.21.0",
-    "typescript ": ">=5.8.0"
+    "eslint": ">=9.22.0",
+    "typescript": ">=5.8.0"
   },
   "dependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.4.1",
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.22.0",
     "eslint-plugin-array-func": "^5.0.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-import-helpers": "^2.0.1",
@@ -61,7 +61,7 @@
     "@types/node": "^22.13.9",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^9.21.0",
+    "eslint": "^9.22.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3"
   }
