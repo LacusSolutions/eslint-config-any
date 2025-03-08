@@ -4,6 +4,7 @@ import eslintCommentsConfigs from './plugins/@eslint-community___eslint-comments
 import arrayFuncConfigs from './plugins/array-func/index.js';
 import importHelpersConfigs from './plugins/import-helpers/index.js';
 import importConfigs from './plugins/import/index.js';
+import markdownConfigs from './plugins/markdown/index.js';
 import perfectionistConfigs from './plugins/perfectionist/index.js';
 import regexpConfigs from './plugins/regexp/index.js';
 import rules from './rules/index.js';
@@ -24,6 +25,7 @@ export default [
       ...rules,
     },
   },
+  ...markdownConfigs,
   ...eslintCommentsConfigs,
   ...arrayFuncConfigs,
   ...importConfigs,
