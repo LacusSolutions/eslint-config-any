@@ -1,9 +1,10 @@
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
+import { VUE } from '../../../utils/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = ['**/*.vue'];
+const matchingFilesPattern = [VUE];
 
 /* @typedef {import('eslint').Linter.Config[]} */
 export default [

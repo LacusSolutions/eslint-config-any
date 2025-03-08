@@ -1,7 +1,11 @@
+import { CJS } from '../../../utils/index.js';
+
+const matchingFilesPattern = [CJS];
+
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ['**/*.{js,cjs}'],
+    files: matchingFilesPattern,
     languageOptions: {
       sourceType: 'commonjs',
     },

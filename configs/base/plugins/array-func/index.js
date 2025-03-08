@@ -1,8 +1,9 @@
 import arrayFuncPlugin from 'eslint-plugin-array-func';
 
+import { JS, TS, VUE } from '../../../../utils/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = ['**/*.{js,jsx,mjsx,cjs,mjs,ts,tsx,mtsx,vue}'];
+const matchingFilesPattern = [JS, TS, VUE];
 const baseArrayFuncConfig = arrayFuncPlugin.configs.recommended;
 
 /** @type {import('eslint').Linter.Config[]} */
