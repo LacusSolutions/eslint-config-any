@@ -3,7 +3,6 @@ import jsEslint from '@eslint/js';
 import arrayFuncPlugin from 'eslint-plugin-array-func';
 import importPlugin from 'eslint-plugin-import';
 import importHelpersPlugin from 'eslint-plugin-import-helpers';
-import noSecretsPlugin from 'eslint-plugin-no-secrets';
 import perfectionistPlugin from 'eslint-plugin-perfectionist';
 import regexpPlugin from 'eslint-plugin-regexp';
 
@@ -34,7 +33,6 @@ export default [
       'array-func': arrayFuncPlugin,
       import: importPlugin,
       'import-helpers': importHelpersPlugin,
-      'no-secrets': noSecretsPlugin,
       perfectionist: perfectionistPlugin,
       regexp: regexpPlugin,
     },
