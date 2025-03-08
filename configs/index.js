@@ -1,9 +1,9 @@
-import jsConfig from './base/index.js';
-import envConfig from './env/index.js';
-import prettierConfig from './prettier/index.js';
-import reactConfig from './react/index.js';
-import tsConfig from './typescript/index.js';
-import vueConfig from './vue/index.js';
+import jsConfigs from './base/index.js';
+import envConfigs from './env/index.js';
+import prettierConfigs from './prettier/index.js';
+import reactConfigs from './react/index.js';
+import tsConfigs from './typescript/index.js';
+import vueConfigs from './vue/index.js';
 
 /**
  * @typedef {import('eslint').Linter.Config[]} EslintFlatConfig
@@ -23,16 +23,16 @@ import vueConfig from './vue/index.js';
  * @return {EslintFlatConfig}
  */
 function mergeConfigs(otherConfigs) {
-  return [...jsConfig, ...tsConfig, ...otherConfigs, ...prettierConfig];
+  return [...jsConfigs, ...tsConfigs, ...otherConfigs, ...prettierConfigs];
 }
 
 /** @type {EslintFlatConfigSetup} */
 export default {
-  node: mergeConfigs(envConfig.node),
-  browser: mergeConfigs(envConfig.browser),
-  sharedNodeAndBrowser: mergeConfigs(envConfig.sharedNodeAndBrowser),
-  commonjs: mergeConfigs(envConfig.commonjs),
-  react: mergeConfigs(reactConfig),
-  vue: mergeConfigs(vueConfig.vue3),
-  vue2: mergeConfigs(vueConfig.vue2),
+  node: mergeConfigs(envConfigs.node),
+  browser: mergeConfigs(envConfigs.browser),
+  sharedNodeAndBrowser: mergeConfigs(envConfigs.sharedNodeAndBrowser),
+  commonjs: mergeConfigs(envConfigs.commonjs),
+  react: mergeConfigs(reactConfigs),
+  vue: mergeConfigs(vueConfigs.vue3),
+  vue2: mergeConfigs(vueConfigs.vue2),
 };

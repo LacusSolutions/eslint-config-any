@@ -15,10 +15,8 @@ export default [
   {
     ...baseTypeScriptConfig,
     files: matchingFilesPattern,
-  },
-  {
-    files: matchingFilesPattern,
     rules: {
+      ...baseTypeScriptConfig.rules,
       ...stylisticRules,
       ...rules,
     },
