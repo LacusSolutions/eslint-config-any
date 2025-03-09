@@ -1,4 +1,5 @@
 import figlet from 'figlet';
+import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import prompts from 'prompts';
@@ -16,15 +17,16 @@ const eslintConfigExt = await getEslintConfigExtension();
 const setupOptions = await pickConfigOptions();
 const templateCode = await getTemplateCode();
 
-await writeEslintConfigFile();
 await installEslintConfig();
+await writeEslintConfigFile();
+await notifyUser();
 
 async function printWelcomeMessage() {
   const packageName = packageMeta.name;
   const packageVersion = packageMeta.version;
   const printable = `${packageName} v${packageVersion}`;
 
-  console.info('\n', figlet.textSync(printable), '\n\n');
+  console.info('\n', figlet.textSync(printable), '\n');
 }
 
 async function checkRuntimeVersion() {
@@ -122,27 +124,78 @@ async function writeEslintConfigFile() {
   const eslintConfigFile = path.resolve(targetDir, `${ESLINT_CONFIG_FILE}.${eslintConfigExt}`);
 
   fs.writeFileSync(eslintConfigFile, templateCode, 'utf8');
-  console.info('\n\n✔️ ESLint config file created successfully.');
 }
 
 async function installEslintConfig() {
   const packageManagers = [
-    { name: 'npm', command: 'npm install --save-dev', lockFiles: ['package-lock.json'] },
-    { name: 'Yarn', command: 'yarn add --dev', lockFiles: ['yarn.lock'] },
+    {
+      name: 'npm',
+      command: 'npm install --save-dev',
+      lockFiles: ['package-lock.json'],
+    },
+    {
+      name: 'Yarn',
+      command: 'yarn add --dev',
+      lockFiles: ['yarn.lock'],
+    },
     {
       name: 'pnpm',
       command: 'pnpm add --save-dev',
       lockFiles: ['pnpm-lock.yml', 'pnpm-lock.yaml'],
     },
-    { name: 'bun', command: 'bun add --dev', lockFiles: ['bun.lock', 'bun.lockb'] },
+    {
+      name: 'bun',
+      command: 'bun add --dev',
+      lockFiles: ['bun.lock', 'bun.lockb'],
+    },
   ];
-  const targetPackageManager =
-    packageManagers.find((pm) => {
-      return pm.lockFiles.some((lockFile) => fs.existsSync(path.join(targetDir, lockFile)));
-    }) ?? packageManagers[0];
 
-  console.log({
-    by_lock_file: targetPackageManager,
-    by_user_agent: process.env.npm_config_user_agent,
+  const packageManagerByLockFile = getPackageManagerByLockFile(targetDir);
+  const packageManagerByUserAgent = getPackageManagerByUserAgent(targetDir);
+  const packageManager =
+    packageManagerByLockFile ?? packageManagerByUserAgent ?? packageManagers[0];
+
+  const packages = Object.keys(packageMeta.peerDependencies)
+    .concat([packageMeta.name])
+    .map((pkg) => `${pkg}@latest`)
+    .join(' ');
+
+  await new Promise((resolve) => {
+    const command = `${packageManager.command} ${packages}`;
+
+    console.info('');
+
+    if (packageManager.name === 'bun') {
+      Bun.spawn(command.split(' '), {
+        cwd: targetDir,
+        onExit: resolve,
+        ipc: (data) => console.log(data),
+      });
+    } else {
+      const child = childProcess.spawn(command, { cwd: targetDir });
+
+      child.stdout.setEncoding('utf8');
+      child.stdout.on('close', resolve);
+      child.stdout.on('data', (data) => console.log(data));
+    }
   });
+
+  function getPackageManagerByLockFile(cwd) {
+    return packageManagers.find((pm) => {
+      return pm.lockFiles.some((lockFile) => fs.existsSync(path.resolve(cwd, lockFile)));
+    });
+  }
+
+  function getPackageManagerByUserAgent() {
+    const userAgent = process.env.npm_config_user_agent;
+    const packageManagerName = userAgent?.split('/').at(0);
+
+    return packageManagers.find((pm) => pm.name === packageManagerName);
+  }
+}
+
+async function notifyUser() {
+  console.info('\n');
+  console.info('✔️  ESLint config file created successfully.');
+  console.info('✔️  Packages installed: "eslint", "typescript" and "eslint-config-jlm".');
 }
