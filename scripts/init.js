@@ -17,6 +17,7 @@ const setupOptions = await pickConfigOptions();
 const templateCode = await getTemplateCode();
 
 await writeEslintConfigFile();
+await installEslintConfig();
 
 async function printWelcomeMessage() {
   const packageName = packageMeta.name;
@@ -67,24 +68,20 @@ async function getEslintConfigExtension() {
   return eslintConfigExtension;
 }
 
-function getConfigOptions() {
-  return [
-    { title: 'React', value: 'react' },
-    { title: 'Vue 3', value: 'vue' },
-    { title: 'Vue 2', value: 'vue2' },
-    { title: 'Node project', value: 'node' },
-    { title: 'Browser project', value: 'browser' },
-    { title: 'Node+Browser project', value: 'sharedNodeAndBrowser' },
-  ];
-}
-
 async function pickConfigOptions() {
   return prompts([
     {
       type: 'select',
       name: 'config',
       message: 'Select the environment of your project:',
-      choices: getConfigOptions(),
+      choices: [
+        { title: 'React', value: 'react' },
+        { title: 'Vue 3', value: 'vue' },
+        { title: 'Vue 2', value: 'vue2' },
+        { title: 'Node project', value: 'node' },
+        { title: 'Browser project', value: 'browser' },
+        { title: 'Node+Browser project', value: 'sharedNodeAndBrowser' },
+      ],
     },
     {
       type: (config) => (/node|browser/i.test(config) ? 'toggle' : null),
@@ -126,4 +123,26 @@ async function writeEslintConfigFile() {
 
   fs.writeFileSync(eslintConfigFile, templateCode, 'utf8');
   console.info('\n\n✔️ ESLint config file created successfully.');
+}
+
+async function installEslintConfig() {
+  const packageManagers = [
+    { name: 'npm', command: 'npm install --save-dev', lockFiles: ['package-lock.json'] },
+    { name: 'Yarn', command: 'yarn add --dev', lockFiles: ['yarn.lock'] },
+    {
+      name: 'pnpm',
+      command: 'pnpm add --save-dev',
+      lockFiles: ['pnpm-lock.yml', 'pnpm-lock.yaml'],
+    },
+    { name: 'bun', command: 'bun add --dev', lockFiles: ['bun.lock', 'bun.lockb'] },
+  ];
+  const targetPackageManager =
+    packageManagers.find((pm) => {
+      return pm.lockFiles.some((lockFile) => fs.existsSync(path.join(targetDir, lockFile)));
+    }) ?? packageManagers[0];
+
+  console.log({
+    by_lock_file: targetPackageManager,
+    by_user_agent: process.env.npm_config_user_agent,
+  });
 }

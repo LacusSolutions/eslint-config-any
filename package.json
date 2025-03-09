@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-jlm",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Base ESLint configuration for JavaScript, TypeScript, React, React Native & Vue projects, by LacusSoft",
   "author": {
     "name": "Julio L. Muller",
