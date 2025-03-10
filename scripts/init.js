@@ -93,6 +93,16 @@ async function pickConfigOptions() {
       inactive: 'No',
       initial: false,
     },
+    {
+      type: 'select',
+      name: 'testRunner',
+      message: 'Select the test runner of your project:',
+      choices: [
+        { title: '<None>', value: null },
+        { title: 'Jest', value: 'jest' },
+        { title: 'Vitest', value: 'vitest' },
+      ],
+    },
   ]);
 }
 
@@ -105,6 +115,10 @@ async function getTemplateCode() {
 
   if (setupOptions.commonjs) {
     configsPresets.push('commonjs');
+  }
+
+  if (setupOptions.testRunner) {
+    configsPresets.push(setupOptions.testRunner);
   }
 
   const repeatablePattern = /@repeatable(.*)\n/g;

@@ -9,10 +9,12 @@ import vueConfigs from './vue/index.js';
  * @typedef {import('eslint').Linter.Config[]} EslintFlatConfig
  *
  * @typedef {Object} EslintFlatConfigSetup
+ * @property {EslintFlatConfig} commonjs
+ * @property {EslintFlatConfig} jest
+ * @property {EslintFlatConfig} vitest
  * @property {EslintFlatConfig} node
  * @property {EslintFlatConfig} browser
  * @property {EslintFlatConfig} sharedNodeAndBrowser
- * @property {EslintFlatConfig} commonjs
  * @property {EslintFlatConfig} react
  * @property {EslintFlatConfig} vue
  * @property {EslintFlatConfig} vue2
@@ -29,6 +31,8 @@ function mergeConfigs(otherConfigs) {
 /** @type {EslintFlatConfigSetup} */
 export default {
   commonjs: envConfigs.commonjs,
+  jest: envConfigs.jest,
+  vitest: envConfigs.vitest,
   node: mergeConfigs(envConfigs.node),
   browser: mergeConfigs(envConfigs.browser),
   sharedNodeAndBrowser: mergeConfigs(envConfigs.sharedNodeAndBrowser),
