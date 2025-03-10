@@ -195,7 +195,12 @@ async function installEslintConfig() {
 }
 
 async function notifyUser() {
+  const packages = Object.keys(packageMeta.peerDependencies)
+    .map((pkg) => `"${pkg}"`)
+    .join(', ')
+    .concat([` and "${packageMeta.name}"`]);
+
   console.info('\n');
   console.info('✔️  ESLint config file created successfully.');
-  console.info('✔️  Packages installed: "eslint", "typescript" and "eslint-config-jlm".');
+  console.info(`✔️  Packages installed: ${packages}.`);
 }
