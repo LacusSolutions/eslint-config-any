@@ -1,19 +1,15 @@
-.DS_Store
-.git*
-.vscode/
+**/.*
 
 __tests__/
-*.spec.js
 *.test.js
-
-**/.*
-**/*.log
-**/*.config.js
+*.spec.js
 
 bun.lock
 bun.lockb
 yarn.lock
+pnpm-lock.yml
 pnpm-lock.yaml
 package-lock.json
-rollup.config.mjs
+
+eslint.config.js
 tsconfig.json
