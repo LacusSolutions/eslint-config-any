@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import glob from 'fast-glob';
 import figlet from 'figlet';
 import childProcess from 'node:child_process';
 import fs from 'node:fs';
@@ -15,8 +16,10 @@ await printWelcomeMessage();
 await checkRuntimeVersion();
 
 const targetDir = await getTargetDir();
+const targetProjectMeta = await getTargetProjectMeta();
 const eslintConfigExt = await getEslintConfigExtension();
-const setupOptions = await pickConfigOptions();
+const workspacesToAddEslint = await getDirsToApplyConfig();
+const setupOptions = await getConfigOptions();
 const templateCode = await getTemplateCode();
 
 await installEslintConfig();
@@ -28,7 +31,7 @@ async function printWelcomeMessage() {
   const packageVersion = packageMeta.version;
   const printable = `${packageName} v${packageVersion}`;
 
-  console.info('\n', figlet.textSync(printable), '\n');
+  console.info('\n', figlet.textSync(printable));
 }
 
 async function checkRuntimeVersion() {
@@ -57,8 +60,8 @@ async function getTargetDir() {
   return targetDir;
 }
 
-async function getEslintConfigExtension() {
-  const targetProjectMetaFile = path.join(targetDir, 'package.json');
+async function getTargetProjectMeta(dir = targetDir) {
+  const targetProjectMetaFile = path.resolve(dir, 'package.json');
 
   if (!fs.existsSync(targetProjectMetaFile)) {
     console.error(`No "package.json" file found in directory "${targetProjectMetaFile}".`);
@@ -67,45 +70,91 @@ async function getEslintConfigExtension() {
 
   const targetProjectMetaData = fs.readFileSync(targetProjectMetaFile, 'utf8');
   const targetProjectMeta = JSON.parse(targetProjectMetaData);
-  const eslintConfigExtension = targetProjectMeta.type === 'module' ? 'js' : 'mjs';
 
-  return eslintConfigExtension;
+  return targetProjectMeta;
 }
 
-async function pickConfigOptions() {
-  return prompts([
-    {
-      type: 'select',
-      name: 'config',
-      message: 'Select the environment of your project:',
-      choices: [
-        { title: 'React', value: 'react' },
-        { title: 'Vue 3', value: 'vue' },
-        { title: 'Vue 2', value: 'vue2' },
-        { title: 'Node project', value: 'node' },
-        { title: 'Browser project', value: 'browser' },
-        { title: 'Node+Browser project', value: 'sharedNodeAndBrowser' },
-      ],
-    },
-    {
-      type: (config) => (/node|browser/i.test(config) ? 'toggle' : null),
-      name: 'commonjs',
-      message: 'Does your project use CommonJS?',
-      active: 'Yes',
-      inactive: 'No',
-      initial: false,
-    },
-    {
-      type: 'select',
-      name: 'testRunner',
-      message: 'Select the test runner of your project:',
-      choices: [
-        { title: '<None>', value: null },
-        { title: 'Jest', value: 'jest' },
-        { title: 'Vitest', value: 'vitest' },
-      ],
-    },
-  ]);
+async function getEslintConfigExtension() {
+  return targetProjectMeta.type === 'module' ? 'js' : 'mjs';
+}
+
+async function getDirsToApplyConfig() {
+  if (!targetProjectMeta.workspaces?.length) {
+    return [targetDir];
+  }
+
+  /** @type {string[]} */
+  const targetDirs = [];
+
+  for (const workspace of targetProjectMeta.workspaces) {
+    const workspaceDirs = await glob(workspace, {
+      onlyDirectories: true,
+      cwd: targetDir,
+    });
+
+    targetDirs.push(...workspaceDirs);
+  }
+
+  return targetDirs;
+}
+
+async function getConfigOptions() {
+  /**
+   * @typedef {Object} ConfigOption
+   * @property {string} config
+   * @property {boolean} commonjs
+   * @property {string} testRunner
+   *
+   * @type {ConfigOption[]}
+   */
+  const configOptions = [];
+
+  for (const dir of workspacesToAddEslint) {
+    try {
+      await getTargetProjectMeta(dir);
+    } catch {
+      continue;
+    }
+
+    console.info(`\nConfiguring ESlint for directory "${dir}":`);
+    const configOption = await prompts([
+      {
+        type: 'select',
+        name: 'config',
+        message: 'Select the environment of your project:',
+        choices: [
+          { title: 'React', value: 'react' },
+          { title: 'Vue 3', value: 'vue' },
+          { title: 'Vue 2', value: 'vue2' },
+          { title: 'Node project', value: 'node' },
+          { title: 'Browser project', value: 'browser' },
+          { title: 'Node+Browser project', value: 'sharedNodeAndBrowser' },
+        ],
+      },
+      {
+        type: (config) => (/node|browser/i.test(config) ? 'toggle' : null),
+        name: 'commonjs',
+        message: 'Does your project use CommonJS?',
+        active: 'Yes',
+        inactive: 'No',
+        initial: false,
+      },
+      {
+        type: 'select',
+        name: 'testRunner',
+        message: 'Select the test runner of your project:',
+        choices: [
+          { title: '<None>', value: null },
+          { title: 'Jest', value: 'jest' },
+          { title: 'Vitest', value: 'vitest' },
+        ],
+      },
+    ]);
+
+    configOptions.push(configOption);
+  }
+
+  return configOptions;
 }
 
 async function getTemplateCode() {
@@ -176,25 +225,27 @@ async function installEslintConfig() {
     .map((pkg) => `${pkg}@latest`)
     .join(' ');
 
-  await new Promise((resolve) => {
-    const command = `${packageManager.command} ${packages}`;
+  for (const dir of workspacesToAddEslint) {
+    await new Promise((resolve) => {
+      const command = `cd ${dir} && ${packageManager.command} ${packages}`;
 
-    console.info('');
+      console.info('');
 
-    if (packageManager.name === 'bun') {
-      Bun.spawn(command.split(' '), {
-        cwd: targetDir,
-        onExit: resolve,
-        ipc: (data) => console.log(data),
-      });
-    } else {
-      const child = childProcess.spawn(command, { cwd: targetDir });
+      if (packageManager.name === 'bun') {
+        Bun.spawn(command.split(' '), {
+          cwd: targetDir,
+          onExit: resolve,
+          ipc: (data) => console.log(data),
+        });
+      } else {
+        const child = childProcess.spawn(command, { cwd: targetDir });
 
-      child.stdout.setEncoding('utf8');
-      child.stdout.on('close', resolve);
-      child.stdout.on('data', (data) => console.log(data));
-    }
-  });
+        child.stdout.setEncoding('utf8');
+        child.stdout.on('close', resolve);
+        child.stdout.on('data', (data) => console.log(data));
+      }
+    });
+  }
 
   function getPackageManagerByLockFile(cwd) {
     return packageManagers.find((pm) => {
@@ -218,5 +269,11 @@ async function notifyUser() {
 
   console.info('\n');
   console.info('✔️  ESLint config file created successfully.');
+  console.info('✔️  Workspaces configured successfully:');
+
+  for (const dir of workspacesToAddEslint) {
+    console.info(`   ✔️  ${dir}`);
+  }
+
   console.info(`✔️  Packages installed: ${packages}.`);
 }
