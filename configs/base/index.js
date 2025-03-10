@@ -17,7 +17,7 @@ const baseJavaScriptConfig = jsEslint.configs.recommended;
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: ['**/coverage/**', '**/build/**', '**/dist/**', '**/*.min.js'],
+    ignores: ['**/coverage/**', '**/build/**', '**/dist/**', '**/*.min.js', '**/node_modules/**'],
   },
   {
     ...baseJavaScriptConfig,
