@@ -13,11 +13,10 @@ const stylisticRules = Object.keys(baseStylisticConfigRules).reduce((acc, rule) 
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  ...baseTypeScriptConfig,
   {
-    ...baseTypeScriptConfig,
     files: matchingFilesPattern,
     rules: {
-      ...baseTypeScriptConfig.rules,
       ...stylisticRules,
       ...rules,
     },
