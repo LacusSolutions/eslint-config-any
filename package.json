@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-jlm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Base ESLint configuration for JavaScript, TypeScript, React, React Native & Vue projects, by LacusSoft",
   "author": {
     "name": "Julio L. Muller",
@@ -37,6 +37,7 @@
   },
   "peerDependencies": {
     "eslint": ">=9.22.0",
+    "prettier": ">=3.5.0",
     "typescript": ">=5.8.0"
   },
   "dependencies": {
@@ -44,11 +45,12 @@
     "@eslint/js": "^9.22.0",
     "@eslint/json": "^0.10.0",
     "@eslint/markdown": "^6.3.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-array-func": "^5.0.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-import-helpers": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-perfectionist": "^4.9.0",
+    "eslint-plugin-perfectionist": "^4.10.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -63,11 +65,12 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@types/bun": "^1.2.4",
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.10",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.22.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.4.3"
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.3"
   }
 }
