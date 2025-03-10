@@ -33,7 +33,7 @@
   "scripts": {
     "prepare": "husky",
     "commit": "git-cz",
-    "lint": "eslint ----fix ."
+    "lint": "eslint --fix ."
   },
   "peerDependencies": {
     "eslint": ">=9.22.0",
