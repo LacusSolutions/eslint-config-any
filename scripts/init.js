@@ -273,7 +273,7 @@ function getTargetDirWorkspacesConfigs() {
     }
 
     if (configOptions.testRunner) {
-      configsPresets.push(targetDirWorkspacesConfigsOptions.testRunner);
+      configsPresets.push(configOptions.testRunner);
     }
 
     const repeatableOutput = Array(configsPresets.length).fill('$1\n').join('');
