@@ -9,45 +9,70 @@ import prompts from 'prompts';
 
 import packageMeta from '../package.json' with { type: 'json' };
 
-const MIN_COMPATIBLE_VERSION = 22;
+/**
+ * @typedef {Object} Workspace
+ * @property {string} name
+ * @property {string} dir
+ *
+ * @typedef {Object} EslintConfigOptions
+ * @property {string} config
+ * @property {boolean} commonjs
+ * @property {string} testRunner
+ *
+ * @typedef {Object} EslintConfig
+ * @property {string} dir
+ * @property {string} code
+ */
+
+const MIN_NODE_COMPATIBLE_VERSION = 22;
+const ROOT_TARGET_PROJECT_NAME = '__PROJECT_ROOT__';
 const ESLINT_CONFIG_FILE = 'eslint.config';
 
-await printWelcomeMessage();
-await checkRuntimeVersion();
+printWelcomeMessage();
+checkRuntimeVersion();
 
-const targetDir = await getTargetDir();
-const targetProjectMeta = await getTargetProjectMeta();
-const eslintConfigExt = await getEslintConfigExtension();
-const workspacesToAddEslint = await getDirsToApplyConfig();
-const setupOptions = await getConfigOptions();
-const templateCode = await getTemplateCode();
+const targetDir = getTargetDir();
+const targetDirWorkspaces = await getTargetDirWorkspaces();
+const [targetDirWorkspacesToConfig, targetDirWorkspacesToInstall] =
+  await getTargetDirWorkspacesActions();
+const targetDirWorkspacesConfigsOptions = await getTargetDirWorkspacesConfigsOptions();
+const targetDirWorkspacesConfigs = getTargetDirWorkspacesConfigs();
 
-await installEslintConfig();
 await writeEslintConfigFile();
+await installEslintConfig();
 await notifyUser();
 
-async function printWelcomeMessage() {
+/**
+ * @returns {void}
+ */
+function printWelcomeMessage() {
   const packageName = packageMeta.name;
   const packageVersion = packageMeta.version;
   const printable = `${packageName} v${packageVersion}`;
 
-  console.info('\n', figlet.textSync(printable));
+  console.info('\n', figlet.textSync(printable), 'zn');
 }
 
-async function checkRuntimeVersion() {
+/**
+ * @returns {void}
+ */
+function checkRuntimeVersion() {
   const runtimeVersion = process.version;
   const majorVersionString = runtimeVersion.match(/v(\d+)/)[1];
   const majorVersionNumber = majorVersionString;
 
-  if (majorVersionNumber < MIN_COMPATIBLE_VERSION) {
+  if (majorVersionNumber < MIN_NODE_COMPATIBLE_VERSION) {
     console.error(
-      `Node.js engine must be at least at version ${MIN_COMPATIBLE_VERSION}. Current version is ${runtimeVersion}.`,
+      `Node.js engine must be at least at version ${MIN_NODE_COMPATIBLE_VERSION}. Current version is ${runtimeVersion}.`,
     );
     process.exit(1);
   }
 }
 
-async function getTargetDir() {
+/**
+ * @returns {string}
+ */
+function getTargetDir() {
   const targetArg = process.argv[2] || '.';
   const targetDir = path.isAbsolute(targetArg) ? targetArg : path.join(process.cwd(), targetArg);
   const targetDirExists = fs.existsSync(targetDir);
@@ -60,68 +85,137 @@ async function getTargetDir() {
   return targetDir;
 }
 
-async function getTargetProjectMeta(dir = targetDir) {
-  const targetProjectMetaFile = path.resolve(dir, 'package.json');
+/**
+ * @param {string} [dir]
+ * @param {Object} [options]
+ * @param {'exit' | 'throw'} [options.onError]
+ * @returns {any}
+ *
+ * @throws {Error}
+ */
+function getProjectMeta(dir, { onError = 'throw' } = {}) {
+  const projectMetaFile = path.resolve(dir, 'package.json');
 
-  if (!fs.existsSync(targetProjectMetaFile)) {
-    console.error(`No "package.json" file found in directory "${targetProjectMetaFile}".`);
+  if (!fs.existsSync(projectMetaFile)) {
+    const errorMessage = `No "package.json" file found in directory "${dir}".`;
+
+    if (onError === 'throw') {
+      throw new Error(errorMessage);
+    }
+
+    console.error(errorMessage);
     process.exit(1);
   }
 
-  const targetProjectMetaData = fs.readFileSync(targetProjectMetaFile, 'utf8');
-  const targetProjectMeta = JSON.parse(targetProjectMetaData);
+  const projectMetaData = fs.readFileSync(projectMetaFile, 'utf8');
+  const projectMeta = JSON.parse(projectMetaData);
 
-  return targetProjectMeta;
+  return projectMeta;
 }
 
-async function getEslintConfigExtension() {
-  return targetProjectMeta.type === 'module' ? 'js' : 'mjs';
-}
+/**
+ * @returns {Promise<Workspace[]>}
+ */
+async function getTargetDirWorkspaces() {
+  const targetProjectMeta = getProjectMeta(targetDir, { onError: 'exit' });
+  const projectMetaWorkspaces = targetProjectMeta.workspaces;
+  /** @type {Workspace[]} */
+  const targetDirWorkspaces = [{ name: ROOT_TARGET_PROJECT_NAME, dir: targetDir }];
 
-async function getDirsToApplyConfig() {
-  if (!targetProjectMeta.workspaces?.length) {
-    return [targetDir];
+  if (!Array.isArray(projectMetaWorkspaces) || !projectMetaWorkspaces.length) {
+    return targetDirWorkspaces;
   }
 
-  /** @type {string[]} */
-  const targetDirs = [];
-
-  for (const workspace of targetProjectMeta.workspaces) {
-    const workspaceDirs = await glob(workspace, {
+  for (const workspacesPattern of projectMetaWorkspaces) {
+    const workspaces = await glob(workspacesPattern, {
       onlyDirectories: true,
       cwd: targetDir,
     });
 
-    targetDirs.push(...workspaceDirs);
+    for (const workspace of workspaces) {
+      const workspaceDor = path.resolve(targetDir, workspace);
+
+      try {
+        getProjectMeta(workspaceDor);
+      } catch {
+        // if no "package.json" found, continue to next iteration
+        continue;
+      }
+
+      targetDirWorkspaces.push({
+        name: workspace,
+        dir: workspaceDor,
+      });
+    }
   }
 
-  return targetDirs;
+  return targetDirWorkspaces;
 }
 
-async function getConfigOptions() {
-  /**
-   * @typedef {Object} ConfigOption
-   * @property {string} config
-   * @property {boolean} commonjs
-   * @property {string} testRunner
-   *
-   * @type {ConfigOption[]}
-   */
-  const configOptions = [];
+/**
+ * @returns {[string[], string[]]}
+ */
+async function getTargetDirWorkspacesActions() {
+  const targetProjectMeta = getProjectMeta(targetDir);
+  const projectMetaWorkspaces = targetProjectMeta.workspaces;
+  const hasWorkspaces = Array.isArray(projectMetaWorkspaces) && projectMetaWorkspaces.length > 0;
+  let workspacesToConfig = [ROOT_TARGET_PROJECT_NAME];
+  let workspacesToInstall = [ROOT_TARGET_PROJECT_NAME];
 
-  for (const dir of workspacesToAddEslint) {
-    try {
-      await getTargetProjectMeta(dir);
-    } catch {
-      continue;
+  if (hasWorkspaces) {
+    const responses = await prompts([
+      {
+        type: 'toggle',
+        name: 'multipleConfigs',
+        message:
+          'Workspaces detected. Would you like to create different ESlint configurations for each one?',
+        active: 'Yes',
+        inactive: 'No',
+        initial: true,
+      },
+      {
+        type: 'multiselect',
+        name: 'workspacesToInstall',
+        message: (individualized) =>
+          `Select the workspaces you'd like to ${
+            individualized ? 'configure' : 'install ESlint and its configurations'
+          }:`,
+        hint: '- press SPACE to toggle options',
+        instructions: false,
+        min: 1,
+        choices: targetDirWorkspaces.map((workspace) => ({
+          title: `/${workspace.name === ROOT_TARGET_PROJECT_NAME ? ' (root)' : workspace.name}`,
+          selected: workspace.name !== ROOT_TARGET_PROJECT_NAME,
+          value: workspace.dir,
+        })),
+      },
+    ]);
+
+    workspacesToInstall = responses.workspacesToInstall;
+
+    if (responses.multipleConfigs) {
+      workspacesToConfig = responses.workspacesToInstall;
     }
+  }
 
-    console.info(`\nConfiguring ESlint for directory "${dir}":`);
-    const configOption = await prompts([
+  return [workspacesToConfig, workspacesToInstall];
+}
+
+/**
+ * @returns {Promise<EslintConfigOptions[]>}
+ */
+async function getTargetDirWorkspacesConfigsOptions() {
+  /** @type {EslintConfigOptions[]} */
+  const targetDirWorkspacesConfigsOptions = [];
+
+  for (const workspaceDir of targetDirWorkspacesToConfig) {
+    console.info(`\nConfiguring ESlint for directory "${workspaceDir}":`);
+
+    const configOptions = await prompts([
       {
         type: 'select',
         name: 'config',
-        message: 'Select the environment of your project:',
+        message: 'Select the environment of the workspace:',
         choices: [
           { title: 'React', value: 'react' },
           { title: 'Vue 3', value: 'vue' },
@@ -134,7 +228,7 @@ async function getConfigOptions() {
       {
         type: (config) => (/node|browser/i.test(config) ? 'toggle' : null),
         name: 'commonjs',
-        message: 'Does your project use CommonJS?',
+        message: 'Does this workspace use CommonJS?',
         active: 'Yes',
         inactive: 'No',
         initial: false,
@@ -142,7 +236,7 @@ async function getConfigOptions() {
       {
         type: 'select',
         name: 'testRunner',
-        message: 'Select the test runner of your project:',
+        message: 'Select the test runner of the workspace:',
         choices: [
           { title: '<None>', value: null },
           { title: 'Jest', value: 'jest' },
@@ -151,46 +245,69 @@ async function getConfigOptions() {
       },
     ]);
 
-    configOptions.push(configOption);
+    targetDirWorkspacesConfigsOptions.push(configOptions);
   }
 
-  return configOptions;
+  return targetDirWorkspacesConfigsOptions;
 }
 
-async function getTemplateCode() {
+/**
+ * @returns {EslintConfig[]}
+ */
+function getTargetDirWorkspacesConfigs() {
   const thisScriptFile = process.argv[1];
   const thisScriptDir = path.dirname(thisScriptFile);
   const templateFile = path.resolve(thisScriptDir, '../scripts/templates', ESLINT_CONFIG_FILE);
   const rawTemplateCode = fs.readFileSync(templateFile, 'utf8');
-  const configsPresets = [setupOptions.config];
-
-  if (setupOptions.commonjs) {
-    configsPresets.push('commonjs');
-  }
-
-  if (setupOptions.testRunner) {
-    configsPresets.push(setupOptions.testRunner);
-  }
-
+  /** @type {EslintConfig[]} */
+  const targetDirWorkspacesConfigs = [];
   const repeatablePattern = /@repeatable(.*)\n/g;
-  const repeatableOutput = Array(configsPresets.length).fill('$1\n').join('');
-  let templateCode = rawTemplateCode.replace(repeatablePattern, repeatableOutput);
+  const configVariablePattern = '{{CONFIGS}}';
 
-  for (const preset of configsPresets) {
-    const configVariablePattern = '{{CONFIGS}}';
+  for (const index in targetDirWorkspacesConfigsOptions) {
+    const configOptions = targetDirWorkspacesConfigsOptions[index];
+    const configsPresets = [configOptions.config];
 
-    templateCode = templateCode.replace(configVariablePattern, preset);
+    if (configOptions.commonjs) {
+      configsPresets.push('commonjs');
+    }
+
+    if (configOptions.testRunner) {
+      configsPresets.push(targetDirWorkspacesConfigsOptions.testRunner);
+    }
+
+    const repeatableOutput = Array(configsPresets.length).fill('$1\n').join('');
+    let templateCode = rawTemplateCode.replace(repeatablePattern, repeatableOutput);
+
+    for (const preset of configsPresets) {
+      templateCode = templateCode.replace(configVariablePattern, preset);
+    }
+
+    targetDirWorkspacesConfigs.push({
+      dir: targetDirWorkspacesToConfig[index],
+      code: templateCode,
+    });
   }
 
-  return templateCode;
+  return targetDirWorkspacesConfigs;
 }
 
+/**
+ * @returns {Promise<void>}
+ */
 async function writeEslintConfigFile() {
-  const eslintConfigFile = path.resolve(targetDir, `${ESLINT_CONFIG_FILE}.${eslintConfigExt}`);
+  for (const config of targetDirWorkspacesConfigs) {
+    const projectMeta = getProjectMeta(config.dir);
+    const eslintConfigExt = projectMeta.type === 'module' ? 'js' : 'mjs';
+    const eslintConfigFile = path.resolve(config.dir, `${ESLINT_CONFIG_FILE}.${eslintConfigExt}`);
 
-  fs.writeFileSync(eslintConfigFile, templateCode, 'utf8');
+    fs.writeFileSync(eslintConfigFile, config.code, 'utf8');
+  }
 }
 
+/**
+ * @returns {Promise<void>}
+ */
 async function installEslintConfig() {
   const packageManagers = [
     {
@@ -225,11 +342,9 @@ async function installEslintConfig() {
     .map((pkg) => `${pkg}@latest`)
     .join(' ');
 
-  for (const dir of workspacesToAddEslint) {
+  for (const workspaceDir of targetDirWorkspacesToInstall) {
     await new Promise((resolve) => {
-      const command = `cd ${dir} && ${packageManager.command} ${packages}`;
-
-      console.info('');
+      const command = `cd ${workspaceDir} && ${packageManager.command} ${packages}`;
 
       if (packageManager.name === 'bun') {
         Bun.spawn(command.split(' '), {
@@ -261,6 +376,9 @@ async function installEslintConfig() {
   }
 }
 
+/**
+ * @returns {Promise<void>}
+ */
 async function notifyUser() {
   const packages = Object.keys(packageMeta.peerDependencies)
     .map((pkg) => `"${pkg}"`)
@@ -268,10 +386,10 @@ async function notifyUser() {
     .concat([` and "${packageMeta.name}"`]);
 
   console.info('\n');
-  console.info('✔️  ESLint config file created successfully.');
+  console.info('✔️  ESLint config file(s) created successfully.');
   console.info('✔️  Workspaces configured successfully:');
 
-  for (const dir of workspacesToAddEslint) {
+  for (const dir of targetDirWorkspaces) {
     console.info(`   ✔️  ${dir}`);
   }
 
