@@ -107,7 +107,7 @@ function getTargetDir() {
 }
 
 /**
- * @param {string} [dir]
+ * @param {string} [actualDir]
  * @param {Object} [options]
  * @param {'exit' | 'throw'} [options.onError]
  * @returns {any}
@@ -115,10 +115,11 @@ function getTargetDir() {
  * @throws {Error}
  */
 function getProjectMeta(dir, { onError = 'throw' } = {}) {
-  const projectMetaFile = path.resolve(dir, 'package.json');
+  const actualDir = dir === ROOT_TARGET_PROJECT_NAME ? targetDir : dir;
+  const projectMetaFile = path.resolve(actualDir, 'package.json');
 
   if (!fs.existsSync(projectMetaFile)) {
-    const errorMessage = `No "package.json" file found in directory "${dir}".`;
+    const errorMessage = `No "package.json" file found in directory "${actualDir}".`;
 
     if (onError === 'throw') {
       throw new Error(errorMessage);
