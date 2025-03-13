@@ -364,16 +364,14 @@ async function installEslintConfig() {
   }
 
   await new Promise((resolve) => {
-    const command = `cd ${targetDir} && ${packageManager.command}`;
-
     if (packageManager.name === 'bun') {
-      Bun.spawn(command.split(' '), {
+      Bun.spawn(packageManager.command.split(' '), {
         cwd: targetDir,
         onExit: resolve,
         ipc: (data) => console.log(data),
       });
     } else {
-      const child = childProcess.spawn(command, { cwd: targetDir });
+      const child = childProcess.spawn(packageManager.command, { cwd: targetDir });
 
       child.stdout.setEncoding('utf8');
       child.stdout.on('close', resolve);
