@@ -223,6 +223,14 @@ async function getTargetDirWorkspacesActions() {
 }
 
 /**
+ * @param {string} path
+ * @returns {string}
+ */
+function getWorkspaceName(path) {
+  return path.replace(targetDir, '').replace(/\\/g, '/') || '/';
+}
+
+/**
  * @returns {Promise<EslintConfigOptions[]>}
  */
 async function getTargetDirWorkspacesConfigsOptions() {
@@ -230,7 +238,7 @@ async function getTargetDirWorkspacesConfigsOptions() {
   const targetDirWorkspacesConfigsOptions = [];
 
   for (const workspaceDir of targetDirWorkspacesToConfig) {
-    console.info(`\nConfiguring ESlint for directory "${workspaceDir}":`);
+    console.info(`\nConfiguring ESlint for directory "${getWorkspaceName(workspaceDir)}":`);
 
     const configOptions = await prompts([
       {
@@ -406,8 +414,8 @@ async function notifyUser() {
   console.info('✔️  ESLint config file(s) created successfully.');
   console.info('✔️  Workspaces configured successfully:');
 
-  for (const dir of targetDirWorkspaces) {
-    console.info(`   ✔️  ${dir}`);
+  for (const workspace of targetDirWorkspaces) {
+    console.info(`   ✔️  ${getWorkspaceName(workspace.dir)}`);
   }
 
   console.info(`✔️  Packages installed: ${packages}.`);
