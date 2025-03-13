@@ -84,7 +84,7 @@ async function getPackageDependencies() {
     const response = await fetch(`https://registry.npmjs.org/${pkg}/latest`);
     const packageData = await response.json();
 
-    targetDevDependencies[pkg] = response.ok ? packageData.version : 'latest';
+    targetDevDependencies[pkg] = response.ok ? `^${packageData.version}` : 'latest';
   }
 
   return targetDevDependencies;
