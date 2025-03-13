@@ -6,6 +6,7 @@ import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import prompts from 'prompts';
+import { addPackageDependencies } from 'write-package';
 
 import packageMeta from '../package.json' with { type: 'json' };
 
@@ -32,6 +33,7 @@ printWelcomeMessage();
 checkRuntimeVersion();
 
 const targetDir = getTargetDir();
+const dependenciesPromise = getPackageDependencies();
 const targetDirWorkspaces = await getTargetDirWorkspaces();
 const [targetDirWorkspacesToConfig, targetDirWorkspacesToInstall] =
   await getTargetDirWorkspacesActions();
@@ -67,6 +69,25 @@ function checkRuntimeVersion() {
     );
     process.exit(1);
   }
+}
+
+/**
+ * @returns {Promise<Record<string, string>>}
+ */
+async function getPackageDependencies() {
+  const packagePeerDependencies = Object.keys(packageMeta.peerDependencies).concat([
+    packageMeta.name,
+  ]);
+  const targetDevDependencies = {};
+
+  for (const pkg of packagePeerDependencies) {
+    const response = await fetch(`https://registry.npmjs.org/${pkg}/latest`);
+    const packageData = await response.json();
+
+    targetDevDependencies[pkg] = response.ok ? packageData.version : 'latest';
+  }
+
+  return targetDevDependencies;
 }
 
 /**
@@ -312,55 +333,53 @@ async function installEslintConfig() {
   const packageManagers = [
     {
       name: 'npm',
-      command: 'npm install --save-dev',
+      command: 'npm install',
       lockFiles: ['package-lock.json'],
     },
     {
       name: 'Yarn',
-      command: 'yarn add --dev',
+      command: 'yarn install',
       lockFiles: ['yarn.lock'],
     },
     {
       name: 'pnpm',
-      command: 'pnpm add --save-dev',
+      command: 'pnpm install',
       lockFiles: ['pnpm-lock.yml', 'pnpm-lock.yaml'],
     },
     {
       name: 'bun',
-      command: 'bun add --dev',
+      command: 'bun install',
       lockFiles: ['bun.lock', 'bun.lockb'],
     },
   ];
 
-  const packageManagerByLockFile = getPackageManagerByLockFile(targetDir);
-  const packageManagerByUserAgent = getPackageManagerByUserAgent(targetDir);
   const packageManager =
-    packageManagerByLockFile ?? packageManagerByUserAgent ?? packageManagers[0];
-
-  const packages = Object.keys(packageMeta.peerDependencies)
-    .concat([packageMeta.name])
-    .map((pkg) => `${pkg}@latest`)
-    .join(' ');
+    getPackageManagerByLockFile(targetDir) ??
+    getPackageManagerByUserAgent(targetDir) ??
+    packageManagers[0];
+  const devDependencies = await dependenciesPromise;
 
   for (const workspaceDir of targetDirWorkspacesToInstall) {
-    await new Promise((resolve) => {
-      const command = `cd ${workspaceDir} && ${packageManager.command} ${packages}`;
-
-      if (packageManager.name === 'bun') {
-        Bun.spawn(command.split(' '), {
-          cwd: targetDir,
-          onExit: resolve,
-          ipc: (data) => console.log(data),
-        });
-      } else {
-        const child = childProcess.spawn(command, { cwd: targetDir });
-
-        child.stdout.setEncoding('utf8');
-        child.stdout.on('close', resolve);
-        child.stdout.on('data', (data) => console.log(data));
-      }
-    });
+    await addPackageDependencies(workspaceDir, { devDependencies });
   }
+
+  await new Promise((resolve) => {
+    const command = `cd ${targetDir} && ${packageManager.command}`;
+
+    if (packageManager.name === 'bun') {
+      Bun.spawn(command.split(' '), {
+        cwd: targetDir,
+        onExit: resolve,
+        ipc: (data) => console.log(data),
+      });
+    } else {
+      const child = childProcess.spawn(command, { cwd: targetDir });
+
+      child.stdout.setEncoding('utf8');
+      child.stdout.on('close', resolve);
+      child.stdout.on('data', (data) => console.log(data));
+    }
+  });
 
   function getPackageManagerByLockFile(cwd) {
     return packageManagers.find((pm) => {
