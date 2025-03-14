@@ -1,15 +1,15 @@
 **/.*
 
-__tests__/
-*.test.js
-*.spec.js
+node_modules/
+scripts/
+test/
+src/
 
 bun.lock
 bun.lockb
 yarn.lock
-pnpm-lock.yml
 pnpm-lock.yaml
 package-lock.json
-
-eslint.config.js
-tsconfig.json
+eslint.config.*
+rollup.config.*
+tsconfig.*

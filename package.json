@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-jlm",
-  "version": "0.5.10",
+  "version": "0.6.0",
   "description": "ESLint configuration for JavaScript, TypeScript, React & Vue projects, by Julio L. Muller",
   "author": {
     "name": "Julio L. Muller",
@@ -32,16 +32,19 @@
   },
   "type": "module",
   "bin": "bin/index.js",
-  "main": "configs/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "prepare": "husky",
     "commit": "git-cz",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "build": "tsc --build src/ scripts/",
+    "build:bin": "tsc --build scripts/",
+    "build:dist": "tsc --build src/"
   },
   "peerDependencies": {
-    "eslint": ">=9.22.0",
-    "prettier": ">=3.5.0",
-    "typescript": ">=5.8.0"
+    "eslint": ">=9.22",
+    "prettier": ">=3.5",
+    "typescript": ">=5.8"
   },
   "dependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.4.1",
@@ -63,19 +66,19 @@
     "figlet": "^1.8.0",
     "globals": "^16.0.0",
     "prompts": "^2.4.2",
-    "typescript-eslint": "^8.26.0",
+    "typescript-eslint": "^8.26.1",
     "write-package": "^7.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
-    "@types/bun": "^1.2.4",
-    "@types/node": "^22.13.10",
+    "@types/bun": "^1.2.5",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.22.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.4.3",
-    "prettier": "^3.5.3"
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   }
 }
