@@ -52,7 +52,9 @@ function printWelcomeMessage() {
   const packageVersion = packageMeta.version;
   const printable = `${packageName} v${packageVersion}`;
 
-  console.info('\n', figlet.textSync(printable), 'zn');
+  console.info();
+  console.info(figlet.textSync(printable));
+  console.info();
 }
 
 /**
