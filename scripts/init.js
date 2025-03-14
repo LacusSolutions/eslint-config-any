@@ -377,14 +377,14 @@ async function installEslintConfig() {
       Bun.spawn(packageManager.command.split(' '), {
         cwd: targetDir,
         onExit: resolve,
-        ipc: (data) => console.log(data),
+        ipc: (data) => console.info(data),
       });
     } else {
       const child = childProcess.spawn(packageManager.command, { cwd: targetDir });
 
       child.stdout.setEncoding('utf8');
       child.stdout.on('close', resolve);
-      child.stdout.on('data', (data) => console.log(data));
+      child.stdout.on('data', (data) => console.info(data));
     }
   });
 
@@ -413,11 +413,13 @@ async function notifyUser() {
 
   console.info('\n');
   console.info('✔️  ESLint config file(s) created successfully.');
-  console.info('✔️  Workspaces configured successfully:');
-
-  for (const workspace of targetDirWorkspaces) {
-    console.info(`   ✔️  ${getWorkspaceName(workspace.dir)}`);
-  }
-
   console.info(`✔️  Packages installed: ${packages}.`);
+
+  if (targetDirWorkspacesToConfig[0] !== ROOT_TARGET_PROJECT_NAME) {
+    console.info('✔️  Workspaces configured successfully:');
+
+    for (const workspace of targetDirWorkspaces) {
+      console.info(`   ✔️  ${getWorkspaceName(workspace.dir)}`);
+    }
+  }
 }
