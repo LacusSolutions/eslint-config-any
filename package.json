@@ -21,12 +21,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/juliolmuller/eslint-config"
+    "url": "https://github.com/juliolmuller/eslint-config-any"
   },
   "bugs": {
-    "url": "https://github.com/juliolmuller/eslint-config/issues"
+    "url": "https://github.com/juliolmuller/eslint-config-any/issues"
   },
-  "homepage": "https://github.com/juliolmuller/eslint-config#readme",
+  "homepage": "https://github.com/juliolmuller/eslint-config-any#readme",
   "engines": {
     "node": ">=22"
   },

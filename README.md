@@ -1,21 +1,21 @@
 # ESlint Configuration Presets - by LacusSoft
 
 <p>
-  <img src="https://img.shields.io/npm/v/eslint-config-jlm" alt="NPM Latest Version" />
+  <img src="https://img.shields.io/npm/v/eslint-config-any" alt="NPM Latest Version" />
 
-  <img src="https://img.shields.io/npm/dependency-version/eslint-config-jlm/peer/eslint" alt="Minimum ESlint version" />
+  <img src="https://img.shields.io/npm/dependency-version/eslint-config-any/peer/eslint" alt="Minimum ESlint version" />
 
-  <img src="https://img.shields.io/npm/dm/eslint-config-jlm.svg?style=flat-square" alt="Downloads Count" />
+  <img src="https://img.shields.io/npm/dm/eslint-config-any.svg?style=flat-square" alt="Downloads Count" />
 
-  <img src="https://img.shields.io/github/last-commit/juliolmuller/eslint-config?" alt="Last Update Date" />
+  <img src="https://img.shields.io/github/last-commit/juliolmuller/eslint-config-any?" alt="Last Update Date" />
 
-  <img src="https://img.shields.io/github/license/juliolmuller/eslint-config" alt="Project License" />
+  <img src="https://img.shields.io/github/license/juliolmuller/eslint-config-any" alt="Project License" />
 </p>
 
 This package provides LacuSoft's base linting configurations for ESlint, in JavaScript projects environments.
 
 ```bash
-$ npm install -D eslint eslint-config-jlm
+$ npm install -D eslint eslint-config-any
 ```
 
 ## Standard preset
