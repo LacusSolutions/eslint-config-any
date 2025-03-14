@@ -230,6 +230,10 @@ async function getTargetDirWorkspacesActions() {
  * @returns {string}
  */
 function getWorkspaceName(path) {
+  if (path === ROOT_TARGET_PROJECT_NAME) {
+    return '/';
+  }
+
   return path.replace(targetDir, '').replace(/\\/g, '/') || '/';
 }
 
@@ -417,7 +421,10 @@ async function notifyUser() {
   console.info('✔️  ESLint config file(s) created successfully.');
   console.info(`✔️  Packages installed: ${packages}.`);
 
-  if (targetDirWorkspacesToConfig[0] !== ROOT_TARGET_PROJECT_NAME) {
+  if (
+    targetDirWorkspacesToConfig.length > 1 ||
+    targetDirWorkspacesToConfig[0] !== ROOT_TARGET_PROJECT_NAME
+  ) {
     console.info('✔️  Workspaces configured successfully:');
 
     for (const workspace of targetDirWorkspaces) {
