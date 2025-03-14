@@ -117,11 +117,10 @@ function getTargetDir() {
  * @throws {Error}
  */
 function getProjectMeta(dir, { onError = 'throw' } = {}) {
-  const actualDir = dir === ROOT_TARGET_PROJECT_NAME ? targetDir : dir;
-  const projectMetaFile = path.resolve(actualDir, 'package.json');
+  const projectMetaFile = path.resolve(dir, 'package.json');
 
   if (!fs.existsSync(projectMetaFile)) {
-    const errorMessage = `No "package.json" file found in directory "${actualDir}".`;
+    const errorMessage = `No "package.json" file found in directory "${dir}".`;
 
     if (onError === 'throw') {
       throw new Error(errorMessage);
@@ -183,8 +182,8 @@ async function getTargetDirWorkspacesActions() {
   const targetProjectMeta = getProjectMeta(targetDir);
   const projectMetaWorkspaces = targetProjectMeta.workspaces;
   const hasWorkspaces = Array.isArray(projectMetaWorkspaces) && projectMetaWorkspaces.length > 0;
-  let workspacesToConfig = [ROOT_TARGET_PROJECT_NAME];
-  let workspacesToInstall = [ROOT_TARGET_PROJECT_NAME];
+  let workspacesToConfig = [targetDir];
+  let workspacesToInstall = [targetDir];
 
   if (hasWorkspaces) {
     const responses = await prompts([
@@ -230,10 +229,6 @@ async function getTargetDirWorkspacesActions() {
  * @returns {string}
  */
 function getWorkspaceName(path) {
-  if (path === ROOT_TARGET_PROJECT_NAME) {
-    return '/';
-  }
-
   return path.replace(targetDir, '').replace(/\\/g, '/') || '/';
 }
 
@@ -421,10 +416,7 @@ async function notifyUser() {
   console.info('✔️  ESLint config file(s) created successfully.');
   console.info(`✔️  Packages installed: ${packages}.`);
 
-  if (
-    targetDirWorkspacesToConfig.length > 1 ||
-    targetDirWorkspacesToConfig[0] !== ROOT_TARGET_PROJECT_NAME
-  ) {
+  if (targetDirWorkspacesToConfig.length > 1 || targetDirWorkspacesToConfig[0] !== targetDir) {
     console.info('✔️  Workspaces configured successfully:');
 
     for (const workspace of targetDirWorkspaces) {
