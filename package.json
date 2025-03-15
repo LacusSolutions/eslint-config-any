@@ -37,7 +37,8 @@
     "prepare": "husky",
     "commit": "git-cz",
     "lint": "eslint --fix src/ scripts/ eslint.config.js rollup.config.js",
-    "prepublishOnly": "bun run lint"
+    "build": "rollup --config",
+    "prepublishOnly": "bun run lint && bun run build"
   },
   "peerDependencies": {
     "eslint": ">=9.22",
@@ -70,6 +71,9 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/bun": "^1.2.5",
     "@types/figlet": "^1.7.0",
     "@types/prompts": "^2.4.9",
@@ -79,6 +83,10 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
+    "rollup": "^4.35.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-delete": "^2.2.0",
+    "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.8.2"
   }
 }
