@@ -3,7 +3,6 @@
 node_modules/
 scripts/
 test/
-src/
 
 bun.lock
 bun.lockb

@@ -31,15 +31,13 @@
     "node": ">=22"
   },
   "type": "module",
-  "bin": "bin/index.js",
+  "bin": "bin/init.js",
   "main": "dist/index.js",
   "scripts": {
     "prepare": "husky",
     "commit": "git-cz",
-    "lint": "eslint --fix .",
-    "build": "tsc --build src/ scripts/",
-    "build:bin": "tsc --build scripts/",
-    "build:dist": "tsc --build src/"
+    "lint": "eslint --fix src/ scripts/ eslint.config.js rollup.config.js",
+    "prepublishOnly": "bun run lint"
   },
   "peerDependencies": {
     "eslint": ">=9.22",
@@ -73,6 +71,8 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@types/bun": "^1.2.5",
+    "@types/figlet": "^1.7.0",
+    "@types/prompts": "^2.4.9",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.22.0",
