@@ -372,7 +372,7 @@ async function installEslintConfig() {
   }
 
   await new Promise((resolve) => {
-    if (packageManager.name === 'bun') {
+    if (packageManager.name === 'bun' && typeof Bun === 'object') {
       Bun.spawn(packageManager.command.split(' '), {
         cwd: targetDir,
         onExit: resolve,
