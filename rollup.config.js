@@ -40,6 +40,9 @@ export default defineConfig([
         target: 'esnext',
       }),
       terserPlugin(),
+      replacePlugin({
+        targets: [{ src: '../scripts/templates', dest: './templates' }],
+      }),
     ],
     external: [
       ...Object.keys(packageMeta.dependencies || {}),
@@ -48,3 +51,35 @@ export default defineConfig([
     ],
   },
 ]);
+
+/**
+ * @typedef {Object} ReplaceOptions
+ * @property {Replacement[]} [targets]
+ *
+ * @typedef {Object} Replacement
+ * @property {string | RegExp} src
+ * @property {string} dest
+ *
+ * @param {ReplaceOptions} [options]
+ */
+function replacePlugin({ targets = [] } = {}) {
+  return {
+    name: 'replace',
+    transform(code) {
+      let transformedCode = code;
+
+      for (const { src, dest } of targets) {
+        if (src instanceof RegExp) {
+          transformedCode = transformedCode.replace(src, dest);
+        } else {
+          transformedCode = transformedCode.replaceAll(src, dest);
+        }
+      }
+
+      return {
+        code: transformedCode,
+        map: null,
+      };
+    },
+  };
+}
