@@ -14,9 +14,10 @@ export default defineConfig([
     output: [
       {
         file: 'bin/init.js',
-        format: 'system',
+        format: 'esm',
         sourcemap: 'inline',
-        banner: `/**
+        banner: `
+/**
  * ${packageMeta.name} v${packageMeta.version}
  * \`init\` - CLI tool to help you configure ESlint in your project.
  *
