@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import glob from 'fast-glob';
 import figlet from 'figlet';
 import childProcess from 'node:child_process';
