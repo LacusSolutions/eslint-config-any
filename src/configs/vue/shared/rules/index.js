@@ -1,5 +1,8 @@
 // TODO: review all rules
 export default {
+  // https://eslint.vuejs.org/rules/multi-word-component-names.html
+  'vue/multi-word-component-names': 'off',
+  //
   // // https://eslint.vuejs.org/rules/html-closing-bracket-newline.html
   // 'vue/html-closing-bracket-newline': [
   //   'error',
@@ -60,9 +63,6 @@ export default {
   //     avoidEscape: false,
   //   },
   // ],
-  //
-  // // https://eslint.vuejs.org/rules/multi-word-component-names.html
-  // 'vue/multi-word-component-names': 'off',
   //
   // // https://eslint.vuejs.org/rules/mustache-interpolation-spacing.html
   // 'vue/mustache-interpolation-spacing': ['error', 'always'],
