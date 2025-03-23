@@ -11,6 +11,54 @@ export default {
   // https://eslint.vuejs.org/rules/multi-word-component-names.html
   'vue/multi-word-component-names': 'off',
 
+  // https://eslint.vuejs.org/rules/order-in-components.html
+  'vue/order-in-components': [
+    'error',
+    {
+      order: [
+        'el',
+        'name',
+        'key', // Nuxt's
+        'head', // Nuxt's
+        'extends',
+        'inheritAttrs',
+        'parent',
+        'functional',
+        ['delimiters', 'comments'],
+        'components',
+        'directives',
+        'filters',
+        'mixins',
+        'provide',
+        'inject',
+        'ROUTER_GUARDS', // Vue Router's
+        'layout', // Nuxt's
+        'middleware', // Nuxt's
+        'validate', // Nuxt's
+        'scrollToTop', // Nuxt's
+        'transition', // Nuxt's
+        'loading', // Nuxt's
+        'model',
+        'expose',
+        'slots',
+        'emits',
+        'props',
+        'propsData',
+        'data',
+        'asyncData', // Nuxt's
+        'computed',
+        'setup',
+        'watch',
+        'watchQuery', // Nuxt's
+        'methods',
+        'fetch', // Nuxt's
+        'LIFECYCLE_HOOKS',
+        ['template', 'render'],
+        'renderError',
+      ],
+    },
+  ],
+
   // // https://eslint.vuejs.org/rules/html-closing-bracket-newline.html
   // 'vue/html-closing-bracket-newline': [
   //   'error',
@@ -74,48 +122,6 @@ export default {
   //
   // // https://eslint.vuejs.org/rules/mustache-interpolation-spacing.html
   // 'vue/mustache-interpolation-spacing': ['error', 'always'],
-  //
-  // // https://eslint.vuejs.org/rules/order-in-components.html
-  // 'vue/order-in-components': [
-  //   'error',
-  //   {
-  //     order: [
-  //       'el',
-  //       'name',
-  //       'key',
-  //       'parent',
-  //       'functional',
-  //       ['delimiters', 'comments'],
-  //       ['components', 'directives', 'filters'],
-  //       'extends',
-  //       'mixins',
-  //       ['provide', 'inject'],
-  //       'ROUTER_GUARDS',
-  //       'layout',
-  //       'middleware',
-  //       'validate',
-  //       'scrollToTop',
-  //       'transition',
-  //       'loading',
-  //       'inheritAttrs',
-  //       'model',
-  //       'emits',
-  //       ['props', 'propsData'],
-  //       'setup',
-  //       'asyncData',
-  //       'data',
-  //       'fetch',
-  //       'head',
-  //       'computed',
-  //       'watch',
-  //       'watchQuery',
-  //       'methods',
-  //       'LIFECYCLE_HOOKS',
-  //       ['template', 'render'],
-  //       'renderError',
-  //     ],
-  //   },
-  // ],
   //
   // // https://eslint.vuejs.org/rules/require-name-property.html
   // 'vue/require-name-property': 'error',
