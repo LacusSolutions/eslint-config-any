@@ -6,9 +6,13 @@ import config from '../shared/index.js';
 import rules from './rules/index.js';
 
 const matchingFilesPattern = [VUE];
+const recommendedConfig = vuePlugin.configs['flat/vue2-recommended'].map((config) => ({
+  ...config,
+  files: matchingFilesPattern,
+}));
 
 export default defineConfig([
-  ...vuePlugin.configs['flat/vue2-recommended'],
+  ...recommendedConfig,
   ...config,
   {
     files: matchingFilesPattern,
