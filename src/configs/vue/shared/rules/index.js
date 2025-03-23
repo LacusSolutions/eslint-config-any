@@ -1,8 +1,16 @@
 // TODO: review all rules
 export default {
+  // https://eslint.vuejs.org/rules/block-order.html
+  'vue/block-order': [
+    'error',
+    {
+      order: ['script', 'template', 'style'],
+    },
+  ],
+
   // https://eslint.vuejs.org/rules/multi-word-component-names.html
   'vue/multi-word-component-names': 'off',
-  //
+
   // // https://eslint.vuejs.org/rules/html-closing-bracket-newline.html
   // 'vue/html-closing-bracket-newline': [
   //   'error',
