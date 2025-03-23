@@ -1,4 +1,3 @@
-// TODO: review all rules
 export default {
   // https://eslint.vuejs.org/rules/block-order.html
   'vue/block-order': [
@@ -73,12 +72,6 @@ export default {
     },
   ],
 
-  // // https://eslint.vuejs.org/rules/script-indent.html
-  // 'vue/script-indent': [
-  //   'error',
-  //   2,
-  //   {
-  //     baseIndent: 0,
-  //   },
-  // ],
+  // https://eslint.vuejs.org/rules/require-name-property.html
+  'vue/require-name-property': 'error',
 };
