@@ -408,7 +408,6 @@ async function notifyUser() {
     .join(', ')
     .concat(` and "${packageMeta.name}"`);
 
-  console.info('\n');
   console.info('✔️  ESLint config file(s) created successfully.');
   console.info(`✔️  Packages installed: ${packages}.`);
 
