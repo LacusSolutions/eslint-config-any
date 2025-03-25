@@ -16,6 +16,11 @@ export default defineConfig([
   {
     ...baseReactConfig,
     files: matchingFilesPattern,
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
   },
   {
     ...baseReactHooksConfig,
