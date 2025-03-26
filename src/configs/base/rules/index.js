@@ -3,7 +3,13 @@ export default {
   eqeqeq: 'error',
 
   // https://eslint.org/docs/rules/func-style
-  'func-style': ['error', 'declaration'],
+  'func-style': [
+    'error',
+    'declaration',
+    {
+      allowArrowFunctions: true,
+    },
+  ],
 
   // https://eslint.org/docs/rules/no-console
   'no-console': [
