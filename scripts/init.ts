@@ -8,20 +8,27 @@ import { addPackageDependencies } from 'write-package';
 
 import packageMeta from '../package.json' with { type: 'json' };
 
-/**
- * @typedef {Object} Workspace
- * @property {string} name
- * @property {string} dir
- *
- * @typedef {Object} EslintConfigOptions
- * @property {string} config
- * @property {boolean} commonjs
- * @property {string} testRunner
- *
- * @typedef {Object} EslintConfig
- * @property {string} dir
- * @property {string} code
- */
+interface Workspace {
+  dir: string;
+  name: string;
+}
+
+interface EslintConfigOptions {
+  commonjs: boolean;
+  config: string;
+  testRunner: null | string;
+}
+
+interface EslintConfig {
+  code: string;
+  dir: string;
+}
+
+interface ProjectMeta {
+  [key: string]: unknown;
+  type?: 'commonjs' | 'module';
+  workspaces?: string[];
+}
 
 const MIN_NODE_COMPATIBLE_VERSION = 22;
 const ROOT_TARGET_PROJECT_NAME = '__PROJECT_ROOT__';
@@ -42,9 +49,6 @@ await writeEslintConfigFile();
 await installEslintConfig();
 await notifyUser();
 
-/**
- * @returns {void}
- */
 function printWelcomeMessage() {
   const packageName = packageMeta.name;
   const packageVersion = packageMeta.version;
@@ -55,9 +59,6 @@ function printWelcomeMessage() {
   console.info();
 }
 
-/**
- * @returns {void}
- */
 function checkRuntimeVersion() {
   const runtimeVersion = process.version;
   const majorVersionString = runtimeVersion.match(/v(\d+)/)?.[1] ?? '0';
@@ -71,9 +72,6 @@ function checkRuntimeVersion() {
   }
 }
 
-/**
- * @returns {Promise<Record<string, string>>}
- */
 async function getPackageDependencies() {
   const packagePeerDependencies = Object.keys(packageMeta.peerDependencies).concat([
     packageMeta.name,
@@ -90,9 +88,6 @@ async function getPackageDependencies() {
   return targetDevDependencies;
 }
 
-/**
- * @returns {string}
- */
 function getTargetDir() {
   const targetArg = process.argv[2] || '.';
   const targetDir = path.isAbsolute(targetArg) ? targetArg : path.join(process.cwd(), targetArg);
@@ -106,15 +101,14 @@ function getTargetDir() {
   return targetDir;
 }
 
-/**
- * @param {string} [actualDir]
- * @param {Object} [options]
- * @param {'exit' | 'throw'} [options.onError]
- * @returns {any}
- *
- * @throws {Error}
- */
-function getProjectMeta(dir: string, { onError = 'throw' } = {}) {
+interface GetProjectMetaOptions {
+  onError?: 'exit' | 'throw';
+}
+
+function getProjectMeta(
+  dir: string,
+  { onError = 'throw' }: GetProjectMetaOptions = {},
+): ProjectMeta {
   const projectMetaFile = path.resolve(dir, 'package.json');
 
   if (!fs.existsSync(projectMetaFile)) {
@@ -134,14 +128,10 @@ function getProjectMeta(dir: string, { onError = 'throw' } = {}) {
   return projectMeta;
 }
 
-/**
- * @returns {Promise<Workspace[]>}
- */
 async function getTargetDirWorkspaces() {
   const targetProjectMeta = getProjectMeta(targetDir, { onError: 'exit' });
   const projectMetaWorkspaces = targetProjectMeta.workspaces;
-  /** @type {Workspace[]} */
-  const targetDirWorkspaces = [{ name: ROOT_TARGET_PROJECT_NAME, dir: targetDir }];
+  const targetDirWorkspaces: Workspace[] = [{ name: ROOT_TARGET_PROJECT_NAME, dir: targetDir }];
 
   if (!Array.isArray(projectMetaWorkspaces) || !projectMetaWorkspaces.length) {
     return targetDirWorkspaces;
@@ -173,9 +163,6 @@ async function getTargetDirWorkspaces() {
   return targetDirWorkspaces;
 }
 
-/**
- * @returns {[string[], string[]]}
- */
 async function getTargetDirWorkspacesActions() {
   const targetProjectMeta = getProjectMeta(targetDir);
   const projectMetaWorkspaces = targetProjectMeta.workspaces;
@@ -219,23 +206,15 @@ async function getTargetDirWorkspacesActions() {
     }
   }
 
-  return [workspacesToConfig, workspacesToInstall];
+  return [workspacesToConfig, workspacesToInstall] as const;
 }
 
-/**
- * @param {string} path
- * @returns {string}
- */
 function getWorkspaceName(path: string) {
   return path.replace(targetDir, '').replace(/\\/g, '/') || '/';
 }
 
-/**
- * @returns {Promise<EslintConfigOptions[]>}
- */
 async function getTargetDirWorkspacesConfigsOptions() {
-  /** @type {EslintConfigOptions[]} */
-  const targetDirWorkspacesConfigsOptions = [];
+  const targetDirWorkspacesConfigsOptions: EslintConfigOptions[] = [];
 
   for (const workspaceDir of targetDirWorkspacesToConfig) {
     console.info(`\nConfiguring ESlint for directory "${getWorkspaceName(workspaceDir)}":`);
@@ -280,16 +259,12 @@ async function getTargetDirWorkspacesConfigsOptions() {
   return targetDirWorkspacesConfigsOptions;
 }
 
-/**
- * @returns {EslintConfig[]}
- */
 function getTargetDirWorkspacesConfigs() {
   const thisScriptFile = process.argv[1];
   const thisScriptDir = path.dirname(thisScriptFile);
   const templateFile = path.resolve(thisScriptDir, '../scripts/templates', ESLINT_CONFIG_FILE);
   const rawTemplateCode = fs.readFileSync(templateFile, 'utf8');
-  /** @type {EslintConfig[]} */
-  const targetDirWorkspacesConfigs = [];
+  const targetDirWorkspacesConfigs: EslintConfig[] = [];
   const repeatablePattern = /@repeatable(.*)\n/g;
   const configVariablePattern = '{{CONFIGS}}';
 
@@ -321,9 +296,6 @@ function getTargetDirWorkspacesConfigs() {
   return targetDirWorkspacesConfigs;
 }
 
-/**
- * @returns {Promise<void>}
- */
 async function writeEslintConfigFile() {
   for (const config of targetDirWorkspacesConfigs) {
     const projectMeta = getProjectMeta(config.dir);
@@ -334,9 +306,6 @@ async function writeEslintConfigFile() {
   }
 }
 
-/**
- * @returns {Promise<void>}
- */
 async function installEslintConfig() {
   const packageManagers = [
     {
@@ -399,9 +368,6 @@ async function installEslintConfig() {
   }
 }
 
-/**
- * @returns {Promise<void>}
- */
 async function notifyUser() {
   const packages = Object.keys(packageMeta.peerDependencies)
     .map((pkg) => `"${pkg}"`)
