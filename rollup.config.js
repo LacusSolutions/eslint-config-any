@@ -10,7 +10,7 @@ import packageMeta from './package.json' with { type: 'json' };
 
 export default defineConfig([
   {
-    input: 'scripts/init.ts',
+    input: 'scripts/init/index.ts',
     output: [
       {
         file: 'bin/init.js',

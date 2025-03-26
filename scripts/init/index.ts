@@ -6,7 +6,7 @@ import path from 'node:path';
 import prompts from 'prompts';
 import { addPackageDependencies } from 'write-package';
 
-import packageMeta from '../package.json' with { type: 'json' };
+import packageMeta from '../../package.json' with { type: 'json' };
 
 interface Workspace {
   dir: string;
