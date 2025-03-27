@@ -22,10 +22,6 @@ export default defineConfig([
   {
     ...baseJavaScriptConfig,
     files: matchingFilesPattern,
-    rules: {
-      ...baseJavaScriptConfig.rules,
-      ...rules,
-    },
   },
   ...jsonConfigs,
   ...markdownConfigs,
@@ -35,4 +31,8 @@ export default defineConfig([
   ...importHelpersConfigs,
   ...perfectionistConfigs,
   ...regexpConfigs,
+  {
+    files: matchingFilesPattern,
+    rules,
+  },
 ]);
