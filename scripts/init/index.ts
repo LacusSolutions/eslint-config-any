@@ -8,6 +8,14 @@ import { addPackageDependencies } from 'write-package';
 
 import packageMeta from '../../package.json' with { type: 'json' };
 
+interface PackageJson {
+  name: string;
+  peerDependencies: Record<string, string>;
+  type?: string;
+  version: string;
+  workspaces?: string[];
+}
+
 interface Workspace {
   dir: string;
   name: string;
@@ -30,26 +38,44 @@ interface ProjectMeta {
   workspaces?: string[];
 }
 
+interface GetProjectMetaOptions {
+  onError?: 'exit' | 'throw';
+}
+
+interface PackageManager {
+  command: string;
+  lockFiles: string[];
+  name: string;
+}
+
 const MIN_NODE_COMPATIBLE_VERSION = 22;
 const ROOT_TARGET_PROJECT_NAME = '__PROJECT_ROOT__';
 const ESLINT_CONFIG_FILE = 'eslint.config';
 
-printWelcomeMessage();
-checkRuntimeVersion();
+export async function init(targetDirArg?: string): Promise<void> {
+  printWelcomeMessage(packageMeta);
+  checkRuntimeVersion(process.version);
 
-const targetDir = getTargetDir();
-const dependenciesPromise = getPackageDependencies();
-const targetDirWorkspaces = await getTargetDirWorkspaces();
-const [targetDirWorkspacesToConfig, targetDirWorkspacesToInstall] =
-  await getTargetDirWorkspacesActions();
-const targetDirWorkspacesConfigsOptions = await getTargetDirWorkspacesConfigsOptions();
-const targetDirWorkspacesConfigs = getTargetDirWorkspacesConfigs();
+  const targetDir = getTargetDir(targetDirArg, process.argv, process.cwd());
+  const dependenciesPromise = getPackageDependencies(packageMeta);
+  const targetDirWorkspaces = await getTargetDirWorkspaces(targetDir);
+  const [targetDirWorkspacesToConfig, targetDirWorkspacesToInstall] =
+    await getTargetDirWorkspacesActions(targetDir, targetDirWorkspaces);
+  const targetDirWorkspacesConfigsOptions = await getTargetDirWorkspacesConfigsOptions(
+    targetDirWorkspacesToConfig,
+    targetDir,
+  );
+  const targetDirWorkspacesConfigs = getTargetDirWorkspacesConfigs(
+    targetDirWorkspacesToConfig,
+    targetDirWorkspacesConfigsOptions,
+  );
 
-await writeEslintConfigFile();
-await installEslintConfig();
-await notifyUser();
+  await writeEslintConfigFile(targetDirWorkspacesConfigs);
+  await installEslintConfig(targetDir, targetDirWorkspacesToInstall, dependenciesPromise);
+  await notifyUser(targetDirWorkspaces, targetDirWorkspacesToConfig, targetDir, packageMeta);
+}
 
-function printWelcomeMessage() {
+function printWelcomeMessage(packageMeta: PackageJson): void {
   const packageName = packageMeta.name;
   const packageVersion = packageMeta.version;
   const printable = `${packageName} v${packageVersion}`;
@@ -59,8 +85,7 @@ function printWelcomeMessage() {
   console.info();
 }
 
-function checkRuntimeVersion() {
-  const runtimeVersion = process.version;
+function checkRuntimeVersion(runtimeVersion: string): void {
   const majorVersionString = runtimeVersion.match(/v(\d+)/)?.[1] ?? '0';
   const majorVersionNumber = Number(majorVersionString);
 
@@ -72,7 +97,7 @@ function checkRuntimeVersion() {
   }
 }
 
-async function getPackageDependencies() {
+async function getPackageDependencies(packageMeta: PackageJson): Promise<Record<string, string>> {
   const packagePeerDependencies = Object.keys(packageMeta.peerDependencies).concat([
     packageMeta.name,
   ]);
@@ -88,9 +113,9 @@ async function getPackageDependencies() {
   return targetDevDependencies;
 }
 
-function getTargetDir() {
-  const targetArg = process.argv[2] || '.';
-  const targetDir = path.isAbsolute(targetArg) ? targetArg : path.join(process.cwd(), targetArg);
+function getTargetDir(targetDirArg: string | undefined, _argv: string[], cwd: string): string {
+  const targetArg = targetDirArg || '.';
+  const targetDir = path.isAbsolute(targetArg) ? targetArg : path.join(cwd, targetArg);
   const targetDirExists = fs.existsSync(targetDir);
 
   if (!targetDirExists) {
@@ -99,10 +124,6 @@ function getTargetDir() {
   }
 
   return targetDir;
-}
-
-interface GetProjectMetaOptions {
-  onError?: 'exit' | 'throw';
 }
 
 function getProjectMeta(
@@ -128,7 +149,7 @@ function getProjectMeta(
   return projectMeta;
 }
 
-async function getTargetDirWorkspaces() {
+async function getTargetDirWorkspaces(targetDir: string): Promise<Workspace[]> {
   const targetProjectMeta = getProjectMeta(targetDir, { onError: 'exit' });
   const projectMetaWorkspaces = targetProjectMeta.workspaces;
   const targetDirWorkspaces: Workspace[] = [{ name: ROOT_TARGET_PROJECT_NAME, dir: targetDir }];
@@ -163,7 +184,10 @@ async function getTargetDirWorkspaces() {
   return targetDirWorkspaces;
 }
 
-async function getTargetDirWorkspacesActions() {
+async function getTargetDirWorkspacesActions(
+  targetDir: string,
+  targetDirWorkspaces: Workspace[],
+): Promise<[string[], string[]]> {
   const targetProjectMeta = getProjectMeta(targetDir);
   const projectMetaWorkspaces = targetProjectMeta.workspaces;
   const hasWorkspaces = Array.isArray(projectMetaWorkspaces) && projectMetaWorkspaces.length > 0;
@@ -209,15 +233,20 @@ async function getTargetDirWorkspacesActions() {
   return [workspacesToConfig, workspacesToInstall] as const;
 }
 
-function getWorkspaceName(path: string) {
+function getWorkspaceName(path: string, targetDir: string): string {
   return path.replace(targetDir, '').replace(/\\/g, '/') || '/';
 }
 
-async function getTargetDirWorkspacesConfigsOptions() {
+async function getTargetDirWorkspacesConfigsOptions(
+  targetDirWorkspacesToConfig: string[],
+  targetDir: string,
+): Promise<EslintConfigOptions[]> {
   const targetDirWorkspacesConfigsOptions: EslintConfigOptions[] = [];
 
   for (const workspaceDir of targetDirWorkspacesToConfig) {
-    console.info(`\nConfiguring ESlint for directory "${getWorkspaceName(workspaceDir)}":`);
+    console.info(
+      `\nConfiguring ESlint for directory "${getWorkspaceName(workspaceDir, targetDir)}":`,
+    );
 
     const configOptions = await prompts([
       {
@@ -259,7 +288,10 @@ async function getTargetDirWorkspacesConfigsOptions() {
   return targetDirWorkspacesConfigsOptions;
 }
 
-function getTargetDirWorkspacesConfigs() {
+function getTargetDirWorkspacesConfigs(
+  targetDirWorkspacesToConfig: string[],
+  targetDirWorkspacesConfigsOptions: EslintConfigOptions[],
+): EslintConfig[] {
   const thisScriptFile = process.argv[1];
   const thisScriptDir = path.dirname(thisScriptFile);
   const templateFile = path.resolve(thisScriptDir, '../scripts/templates', ESLINT_CONFIG_FILE);
@@ -296,7 +328,7 @@ function getTargetDirWorkspacesConfigs() {
   return targetDirWorkspacesConfigs;
 }
 
-async function writeEslintConfigFile() {
+async function writeEslintConfigFile(targetDirWorkspacesConfigs: EslintConfig[]): Promise<void> {
   for (const config of targetDirWorkspacesConfigs) {
     const projectMeta = getProjectMeta(config.dir);
     const eslintConfigExt = projectMeta.type === 'module' ? 'js' : 'mjs';
@@ -306,8 +338,12 @@ async function writeEslintConfigFile() {
   }
 }
 
-async function installEslintConfig() {
-  const packageManagers = [
+async function installEslintConfig(
+  targetDir: string,
+  targetDirWorkspacesToInstall: string[],
+  dependenciesPromise: Promise<Record<string, string>>,
+): Promise<void> {
+  const packageManagers: PackageManager[] = [
     {
       name: 'npm',
       command: 'npm install',
@@ -354,13 +390,13 @@ async function installEslintConfig() {
     }
   });
 
-  function getPackageManagerByLockFile(cwd: string) {
+  function getPackageManagerByLockFile(cwd: string): PackageManager | undefined {
     return packageManagers.find((pm) => {
       return pm.lockFiles.some((lockFile) => fs.existsSync(path.resolve(cwd, lockFile)));
     });
   }
 
-  function getPackageManagerByUserAgent() {
+  function getPackageManagerByUserAgent(): PackageManager | undefined {
     const userAgent = process.env.npm_config_user_agent;
     const packageManagerName = userAgent?.split('/').at(0);
 
@@ -368,7 +404,12 @@ async function installEslintConfig() {
   }
 }
 
-async function notifyUser() {
+async function notifyUser(
+  targetDirWorkspaces: Workspace[],
+  targetDirWorkspacesToConfig: string[],
+  targetDir: string,
+  packageMeta: PackageJson,
+): Promise<void> {
   const packages = Object.keys(packageMeta.peerDependencies)
     .map((pkg) => `"${pkg}"`)
     .join(', ')
@@ -381,7 +422,7 @@ async function notifyUser() {
     console.info('✔️  Workspaces configured successfully:');
 
     for (const workspace of targetDirWorkspaces) {
-      console.info(`   ✔️  ${getWorkspaceName(workspace.dir)}`);
+      console.info(`   ✔️  ${getWorkspaceName(workspace.dir, targetDir)}`);
     }
   }
 }
