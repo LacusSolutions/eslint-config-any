@@ -19,6 +19,9 @@ export default {
     },
   ],
 
+  // https://eslint.org/docs/rules/no-empty-function
+  'no-empty-function': 'off',
+
   // https://eslint.org/docs/rules/no-unused-vars
   'no-unused-vars': [
     'error',
