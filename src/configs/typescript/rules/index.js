@@ -11,6 +11,9 @@ export default {
     },
   ],
 
+  // https://typescript-eslint.io/rules/explicit-function-return-type
+  '@typescript-eslint/explicit-function-return-type': 'warn',
+
   // https://typescript-eslint.io/rules/no-unused-vars
   '@typescript-eslint/no-unused-vars': standardRules['no-unused-vars'],
 };
