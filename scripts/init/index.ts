@@ -294,7 +294,7 @@ function getTargetDirWorkspacesConfigs(
 ): EslintConfig[] {
   const thisScriptFile = process.argv[1];
   const thisScriptDir = path.dirname(thisScriptFile);
-  const templateFile = path.resolve(thisScriptDir, '../scripts/templates', ESLINT_CONFIG_FILE);
+  const templateFile = path.resolve(thisScriptDir, '../../scripts/templates', ESLINT_CONFIG_FILE);
   const rawTemplateCode = fs.readFileSync(templateFile, 'utf8');
   const targetDirWorkspacesConfigs: EslintConfig[] = [];
   const repeatablePattern = /@repeatable(.*)\n/g;

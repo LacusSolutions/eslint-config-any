@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-jlm",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "ESLint configuration for JavaScript, TypeScript, React & Vue projects, by Julio L. Muller",
   "author": {
     "name": "Julio L. Muller",

@@ -41,7 +41,7 @@ export default defineConfig([
       }),
       terserPlugin(),
       replacePlugin({
-        targets: [{ src: '../scripts/templates', dest: './templates' }],
+        targets: [{ src: '../../scripts/templates', dest: './templates' }],
       }),
     ],
     external: [
