@@ -78,8 +78,10 @@ export default [
   ...anyConfig.commonjs,
   ...anyConfig.jest,
   {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    'no-console': 'off',
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      'no-console': 'off',
+    },
   },
 ];
 ```
