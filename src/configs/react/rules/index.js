@@ -1,4 +1,7 @@
 export default {
+  // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/no-autofocus.md
+  'jsx-a11y/no-autofocus': 'off',
+
   // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
   'react/jsx-boolean-value': ['warn', 'never'],
 
