@@ -19,6 +19,4 @@ jobs:
       - name: Publish to NPM
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_ENV_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: bun publish --access public
