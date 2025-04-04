@@ -4,9 +4,6 @@ on:
   release:
     types: [created]
 
-env:
-  HUSKY: 0
-
 jobs:
   publish:
     runs-on: ubuntu-latest
