@@ -4,6 +4,9 @@ on:
   release:
     types: [created]
 
+env:
+  HUSKY: 0
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -20,4 +23,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: HUSKY=0 bun publish --access public
+        run: bun publish --access public
