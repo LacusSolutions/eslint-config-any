@@ -2,6 +2,7 @@ import { defineConfig } from 'eslint/config';
 import tsEslint from 'typescript-eslint';
 
 import { TS, VUE } from '../../utils/index.js';
+import commonjs from '../env/commonjs/index.js';
 import rules from './rules/index.js';
 
 const matchingFilesPattern = [TS, VUE];
@@ -20,5 +21,9 @@ export default defineConfig([
       ...stylisticRules,
       ...rules,
     },
+  },
+  {
+    ...commonjs[0],
+    files: ['**/*.cjs'],
   },
 ]);

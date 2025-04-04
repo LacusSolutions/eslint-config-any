@@ -10,5 +10,8 @@ export default defineConfig([
     languageOptions: {
       sourceType: 'commonjs',
     },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
   },
 ]);
