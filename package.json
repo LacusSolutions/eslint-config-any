@@ -33,7 +33,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "prepare": "husky || true",
+    "prepare": "husky",
     "commit": "git-cz",
     "lint": "eslint --fix src/ eslint.config.js"
   },
