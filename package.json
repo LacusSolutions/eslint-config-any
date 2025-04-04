@@ -35,8 +35,7 @@
   "scripts": {
     "prepare": "husky",
     "commit": "git-cz",
-    "lint": "eslint --fix src/ eslint.config.js",
-    "prepublishOnly": "bun run lint"
+    "lint": "eslint --fix src/ eslint.config.js"
   },
   "peerDependencies": {
     "eslint": ">=9.22",
