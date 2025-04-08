@@ -1,20 +1,13 @@
-# ESlint Configuration for Any JS Project
+# ESLint Configuration for Any JS Project
 
-<p>
-  <img src="https://img.shields.io/npm/v/eslint-config-any" alt="NPM Latest Version" />
-
-  <img src="https://img.shields.io/npm/dependency-version/eslint-config-any/peer/eslint" alt="Minimum ESlint version" />
-
-  <img src="https://img.shields.io/npm/dependency-version/eslint-config-any/peer/prettier" alt="Minimum Prettier version" />
-
-  <img src="https://img.shields.io/npm/dependency-version/eslint-config-any/peer/typescript" alt="Minimum TypeScript version" />
-
-  <img src="https://img.shields.io/npm/dm/eslint-config-any.svg?style=flat-square" alt="Downloads Count" />
-
-  <img src="https://img.shields.io/github/last-commit/juliolmuller/eslint-config-any?" alt="Last Update Date" />
-
-  <img src="https://img.shields.io/github/license/juliolmuller/eslint-config-any" alt="Project License" />
-</p>
+![NPM Latest Version](https://img.shields.io/npm/v/eslint-config-any)
+![Minimum ESLint version](https://img.shields.io/npm/dependency-version/eslint-config-any/peer/eslint)
+![Minimum Prettier version](https://img.shields.io/npm/dependency-version/eslint-config-any/peer/prettier)
+![Minimum TypeScript version](https://img.shields.io/npm/dependency-version/eslint-config-any/peer/typescript)
+![Downloads Count](https://img.shields.io/npm/dm/eslint-config-any.svg)
+![Test Status](https://img.shields.io/github/actions/workflow/status/juliolmuller/eslint-config-any/publish.yml?label=ci/cd)
+![Last Update Date](https://img.shields.io/github/last-commit/juliolmuller/eslint-config-any)
+![Project License](https://img.shields.io/github/license/juliolmuller/eslint-config-any)
 
 This package provides strict linting and formatting rules for (almost) all sorts of JavaScript stack projects, like React, Vue, Vanilla, Node and their variants in TypeScript.
 
