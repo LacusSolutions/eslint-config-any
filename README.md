@@ -1,9 +1,6 @@
 # ESLint Configuration for Any JS Project
 
 ![NPM Latest Version](https://img.shields.io/npm/v/eslint-config-any)
-![Minimum ESLint version](https://img.shields.io/npm/dependency-version/eslint-config-any/peer/eslint)
-![Minimum Prettier version](https://img.shields.io/npm/dependency-version/eslint-config-any/peer/prettier)
-![Minimum TypeScript version](https://img.shields.io/npm/dependency-version/eslint-config-any/peer/typescript)
 ![Downloads Count](https://img.shields.io/npm/dm/eslint-config-any.svg)
 ![Test Status](https://img.shields.io/github/actions/workflow/status/juliolmuller/eslint-config-any/publish.yml?label=ci/cd)
 ![Last Update Date](https://img.shields.io/github/last-commit/juliolmuller/eslint-config-any)
