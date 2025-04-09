@@ -10,3 +10,4 @@ package-lock.json
 eslint.config.*
 rollup.config.*
 tsconfig.*
+bunfig.toml
