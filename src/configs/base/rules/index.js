@@ -33,6 +33,16 @@ export default {
   ],
 
   // https://eslint.org/docs/rules/prefer-arrow-callback
+  'no-useless-rename': [
+    'error',
+    {
+      ignoreDestructuring: false,
+      ignoreImport: false,
+      ignoreExport: false,
+    },
+  ],
+
+  // https://eslint.org/docs/rules/prefer-arrow-callback
   'prefer-arrow-callback': 'error',
 
   // https://eslint.org/docs/rules/prefer-const
