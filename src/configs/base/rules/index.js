@@ -42,6 +42,9 @@ export default {
     },
   ],
 
+  // https://eslint.org/docs/rules/object-shorthand
+  'object-shorthand': 'warn',
+
   // https://eslint.org/docs/rules/prefer-arrow-callback
   'prefer-arrow-callback': 'error',
 
