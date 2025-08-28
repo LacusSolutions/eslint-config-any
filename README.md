@@ -2,9 +2,9 @@
 
 ![NPM Latest Version](https://img.shields.io/npm/v/eslint-config-any)
 ![Downloads Count](https://img.shields.io/npm/dm/eslint-config-any.svg)
-![Test Status](https://img.shields.io/github/actions/workflow/status/juliolmuller/eslint-config-any/publish.yml?label=ci/cd)
-![Last Update Date](https://img.shields.io/github/last-commit/juliolmuller/eslint-config-any)
-![Project License](https://img.shields.io/github/license/juliolmuller/eslint-config-any)
+![Test Status](https://img.shields.io/github/actions/workflow/status/LacusSolutions/eslint-config-any/publish.yml?label=ci/cd)
+![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/eslint-config-any)
+![Project License](https://img.shields.io/github/license/LacusSolutions/eslint-config-any)
 
 This package provides strict linting and formatting rules for (almost) all sorts of JavaScript stack projects, like React, Vue, Vanilla, Node and their variants in TypeScript.
 
