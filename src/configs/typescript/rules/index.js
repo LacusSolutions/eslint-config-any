@@ -21,6 +21,9 @@ export default {
   '@typescript-eslint/no-empty-function': 'off',
   'no-empty-function': 'off',
 
+  // https://typescript-eslint.io/rules/no-namespace
+  '@typescript-eslint/no-namespace': 'off',
+
   // https://typescript-eslint.io/rules/no-unused-vars
   '@typescript-eslint/no-unused-vars': standardRules['no-unused-vars'],
 
