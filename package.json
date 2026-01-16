@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/LacusSolutions/eslint-config-any#readme",
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "type": "module",
   "main": "dist/index.js",
