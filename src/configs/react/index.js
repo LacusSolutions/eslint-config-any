@@ -9,7 +9,7 @@ import rules from './rules/index.js';
 
 const matchingFilesPattern = [JS, TS];
 const baseReactConfig = reactPlugin.configs.flat.recommended;
-const baseReactHooksConfig = reactHooksPlugin.configs['recommended-latest'];
+const baseReactHooksConfig = reactHooksPlugin.configs.flat['recommended-latest'];
 const baseJsxA11yConfig = jsxA11yPlugin.flatConfigs.recommended;
 
 export default defineConfig([
