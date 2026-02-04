@@ -8,6 +8,10 @@ export default defineConfig([
       'prettier/prettier': [
         'warn',
         {
+          plugins: ['prettier-plugin-jsdoc'],
+          jsdocCommentLineStrategy: 'multiline',
+          jsdocDescriptionWithDot: true,
+          jsdocPrintWidth: 80,
           printWidth: 100,
           singleQuote: true,
         },
