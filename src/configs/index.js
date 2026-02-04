@@ -22,13 +22,15 @@ import vueConfigs from './vue/index.js';
 
 /**
  * @param {EslintFlatConfig} otherConfigs
- * @return {EslintFlatConfig}
+ * @returns {EslintFlatConfig}
  */
 function mergeConfigs(otherConfigs) {
   return [...jsConfigs, ...tsConfigs, ...otherConfigs, ...prettierConfigs];
 }
 
-/** @type {EslintFlatConfigSetup} */
+/**
+ * @type {EslintFlatConfigSetup}
+ */
 export default {
   commonjs: envConfigs.commonjs,
   jest: envConfigs.jest,
