@@ -5,7 +5,7 @@ import { JS, TS, VUE } from '../../../../utils/index.js';
 import rules from './rules/index.js';
 
 const matchingFilesPattern = [JS, TS, VUE];
-const baseRegExpConfig = regexpPlugin.configs['flat/recommended'];
+const baseRegExpConfig = regexpPlugin.configs.recommended;
 
 export default defineConfig([
   {
