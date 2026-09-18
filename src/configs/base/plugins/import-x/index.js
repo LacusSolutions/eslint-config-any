@@ -1,4 +1,4 @@
-import importPlugin from 'eslint-plugin-import';
+import { importX } from 'eslint-plugin-import-x';
 import { defineConfig } from 'eslint/config';
 
 import { JS, TS, VUE } from '../../../../utils/index.js';
@@ -10,7 +10,7 @@ export default defineConfig([
   {
     files: matchingFilesPattern,
     plugins: {
-      import: importPlugin,
+      'import-x': importX,
     },
     rules,
   },

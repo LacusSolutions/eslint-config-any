@@ -5,7 +5,7 @@ import { JS, TS, VUE } from '../../utils/index.js';
 import eslintCommentsConfigs from './plugins/@eslint-community___eslint-comments/index.js';
 import arrayFuncConfigs from './plugins/array-func/index.js';
 import importHelpersConfigs from './plugins/import-helpers/index.js';
-import importConfigs from './plugins/import/index.js';
+import importXConfigs from './plugins/import-x/index.js';
 import jsonConfigs from './plugins/json/index.js';
 import markdownConfigs from './plugins/markdown/index.js';
 import perfectionistConfigs from './plugins/perfectionist/index.js';
@@ -27,7 +27,7 @@ export default defineConfig([
   ...markdownConfigs,
   ...eslintCommentsConfigs,
   ...arrayFuncConfigs,
-  ...importConfigs,
+  ...importXConfigs,
   ...importHelpersConfigs,
   ...perfectionistConfigs,
   ...regexpConfigs,
