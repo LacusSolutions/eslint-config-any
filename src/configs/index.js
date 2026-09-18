@@ -6,7 +6,7 @@ import tsConfigs from './typescript/index.js';
 import vueConfigs from './vue/index.js';
 
 /**
- * @typedef {import('eslint').Linter.Config[]} EslintFlatConfig
+ * @typedef {import('eslint/config').ConfigObject[]} EslintFlatConfig
  *
  * @typedef {Object} EslintFlatConfigSetup
  * @property {EslintFlatConfig} commonjs
