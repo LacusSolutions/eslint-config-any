@@ -1,12 +1,12 @@
 export default {
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/consistent-type-specifier-style.md
-  'import-x/consistent-type-specifier-style': ["error", "prefer-inline"],
+  'import-x/consistent-type-specifier-style': ['error', 'prefer-inline'],
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/default.md
   'import-x/default': 'error',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/dynamic-import-chunkname.md
-  'import-x/dynamic-import-chunkname': 'error',
+  'import-x/dynamic-import-chunkname': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/export.md
   'import-x/export': 'error',
@@ -15,18 +15,25 @@ export default {
   'import-x/exports-last': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/extensions.md
-  'import-x/extensions': ['warn', 'always', {
-    js: 'never',
-    cjs: 'never',
-    mjs: 'never',
-    jsx: 'never',
-    mjsx: 'never',
-    ts: 'never',
-    mts: 'never',
-    tsx: 'never',
-    mtsx: 'never',
-    vue: 'never',
-  }],
+  'import-x/extensions': [
+    'warn',
+    'always',
+    {
+      ignorePackages: true,
+      pattern: {
+        js: 'never',
+        cjs: 'never',
+        mjs: 'never',
+        jsx: 'never',
+        mjsx: 'never',
+        ts: 'never',
+        mts: 'never',
+        tsx: 'never',
+        mtsx: 'never',
+        vue: 'never',
+      },
+    },
+  ],
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/first.md
   'import-x/first': 'error',
@@ -35,7 +42,9 @@ export default {
   'import-x/group-exports': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/imports-first.md
-  /** @deprecated */
+  /**
+   * @deprecated
+   */
   'import-x/imports-first': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/max-dependencies.md
@@ -48,9 +57,12 @@ export default {
   'import-x/namespace': 'error',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/newline-after-import.md
-  'import-x/newline-after-import': ['warn', {
-    considerComments: true,
-  }],
+  'import-x/newline-after-import': [
+    'warn',
+    {
+      considerComments: true,
+    },
+  ],
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-absolute-path.md
   'import-x/no-absolute-path': 'error',
@@ -59,16 +71,19 @@ export default {
   'import-x/no-amd': 'error',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-anonymous-default-export.md
-  'import-x/no-anonymous-default-export': ["error", {
-    "allowArray": true,
-    "allowArrowFunction": true,
-    "allowAnonymousClass": false,
-    "allowAnonymousFunction": false,
-    "allowCallExpression": false,
-    "allowNew": true,
-    "allowLiteral": false,
-    "allowObject": true
-  }],
+  'import-x/no-anonymous-default-export': [
+    'error',
+    {
+      allowArray: true,
+      allowArrowFunction: true,
+      allowAnonymousClass: false,
+      allowAnonymousFunction: false,
+      allowCallExpression: true,
+      allowNew: true,
+      allowLiteral: false,
+      allowObject: true,
+    },
+  ],
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-commonjs.md
   'import-x/no-commonjs': 'off',
@@ -83,7 +98,12 @@ export default {
   'import-x/no-deprecated': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md
-  'import-x/no-duplicates': 'warn',
+  'import-x/no-duplicates': [
+    'warn',
+    {
+      'prefer-inline': true,
+    },
+  ],
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-dynamic-require.md
   'import-x/no-dynamic-require': 'warn',
@@ -122,15 +142,18 @@ export default {
   'import-x/no-unassigned-import': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unresolved.md
-  'import-x/no-unresolved': ['error', {
-    caseSensitiveStrict: true,
-    caseSensitive: true,
-    commonjs: true,
-    amd: true,
-  }],
+  'import-x/no-unresolved': [
+    'error',
+    {
+      caseSensitiveStrict: true,
+      caseSensitive: true,
+      commonjs: true,
+      amd: true,
+    },
+  ],
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unused-modules.md
-  'import-x/no-unused-modules': 'warn',
+  'import-x/no-unused-modules': 'off',
 
   // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-useless-path-segments.md
   'import-x/no-useless-path-segments': 'off',

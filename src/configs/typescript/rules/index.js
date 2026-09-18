@@ -29,4 +29,11 @@ export default {
 
   // https://typescript-eslint.io/rules/triple-slash-reference
   '@typescript-eslint/triple-slash-reference': 'off',
+
+  // Rules covered by TSC
+  'import-x/default': 'off',
+  'import-x/named': 'off',
+  'import-x/namespace': 'off',
+  'import-x/no-named-as-default-member': 'off',
+  'import-x/no-unresolved': 'off',
 };
