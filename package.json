@@ -19,6 +19,10 @@
     "vitest",
     "commonjs"
   ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LacusSolutions/eslint-config-any.git"
