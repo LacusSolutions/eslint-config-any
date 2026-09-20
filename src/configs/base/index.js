@@ -3,6 +3,7 @@ import { defineConfig } from 'eslint/config';
 
 import { JS, TS, VUE } from '../../utils/index.js';
 import eslintCommentsConfigs from './plugins/@eslint-community___eslint-comments/index.js';
+import stylisticConfigs from './plugins/@stylistic/index.js';
 import arrayFuncConfigs from './plugins/array-func/index.js';
 import importHelpersConfigs from './plugins/import-helpers/index.js';
 import importXConfigs from './plugins/import-x/index.js';
@@ -31,6 +32,7 @@ export default defineConfig([
   ...importHelpersConfigs,
   ...perfectionistConfigs,
   ...regexpConfigs,
+  ...stylisticConfigs,
   {
     files: matchingFilesPattern,
     rules,
