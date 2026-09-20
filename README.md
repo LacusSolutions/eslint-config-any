@@ -8,6 +8,8 @@
 
 This package provides strict linting and formatting rules for (almost) all sorts of JavaScript stack projects, like React, Vue, Vanilla, Node and their variants in TypeScript.
 
+Requires **ESLint 10+** and **Node 22+**.
+
 ## Setup
 
 **Plug-and-paly**: this is designed to be as simple as possible to setup, so you can invest your time in your project.
@@ -39,7 +41,7 @@ This package provides strict linting and formatting rules for (almost) all sorts
 
 This package is designed to make you write the less code as possible, so you don't need to deal with scaffold-hell and learning how to setup a ESlint or Prettier configuration.
 
-With the latest version of ESlint (9+) and its [Flat Configuration](https://eslint.org/blog/2022/08/new-config-system-part-1/), things got a little more complicated to setup, specially if you seek stricter rules for linting and formatting (like I do). However, things got way more flexible, allowing plugins and configs to apply only to certain files that actually use them for linting. For example, you'll only need `eslint-plugin-vue` for `*.vue` files, ot TypeScript-specific rules in files that actually use TS, and so on.
+With ESLint 10+ and its [Flat Configuration](https://eslint.org/blog/2022/08/new-config-system-part-1/), things got a little more complicated to setup, specially if you seek stricter rules for linting and formatting (like I do). However, things got way more flexible, allowing plugins and configs to apply only to certain files that actually use them for linting. For example, you'll only need `eslint-plugin-vue` for `*.vue` files, ot TypeScript-specific rules in files that actually use TS, and so on.
 
 So you'll' just need to select one generalized preset and make small compositions in a few cases.
 
@@ -71,10 +73,26 @@ export default [
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'off',
       'no-console': 'off',
+      'import-x/no-duplicates': 'off',
+      'jsx-a11y-x/no-autofocus': 'error',
     },
   },
 ];
 ```
+
+React/import/a11y overrides use `@eslint-react/*`, `import-x/*`, and `jsx-a11y-x/*` (not `react/*`, `react-hooks/*`, `import/*`, or `jsx-a11y/*`).
+
+## ESLint 10 notes
+
+- `eslint:recommended` now includes `no-unassigned-vars`, `no-useless-assignment`, and `preserve-caught-error`. This package leaves them on.
+- `/* eslint-env */` comments are errors; use `languageOptions.globals` or these presets.
+- Config files are resolved from each linted file upward (monorepos: put `eslint.config.*` where the files live, or pass `--config`).
+- `.eslintignore` is gone; if you need gitignore-driven ignores, use `includeIgnoreFile()` from `eslint/config` in **your** config.
+- JSX components count as variable references (`no-unused-vars` / `no-undef`).
+- `no-shadow-restricted-names` reports `globalThis` by default.
+- React rules are `@eslint-react/*`, not `react/*` / `react-hooks/*`. Import rules are `import-x/*`, not `import/*`. A11y rules are `jsx-a11y-x/*`.
+- `import-x/extensions` omits JS/TS/Vue extensions. That fights `moduleResolution: "node16"` / `"nodenext"` (TypeScript requires `.js` in import specifiers). Override to `'off'` or `'always'` in that case.
+- On `*.ts` / `*.vue`, `import-x/named`, `namespace`, `default`, `no-unresolved`, and `no-named-as-default-member` are off — `tsc` already covers them.
 
 ## Contribute
 

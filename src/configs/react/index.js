@@ -1,6 +1,5 @@
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactPlugin from '@eslint-react/eslint-plugin';
+import jsxA11yXPlugin from 'eslint-plugin-jsx-a11y-x';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 
@@ -8,23 +7,18 @@ import { JS, TS } from '../../utils/index.js';
 import rules from './rules/index.js';
 
 const matchingFilesPattern = [JS, TS];
-const baseReactConfig = reactPlugin.configs.flat.recommended;
-const baseReactHooksConfig = reactHooksPlugin.configs.flat['recommended-latest'];
-const baseJsxA11yConfig = jsxA11yPlugin.flatConfigs.recommended;
+const baseReactJsConfig = reactPlugin.configs.strict;
+const baseReactTsConfig = reactPlugin.configs['strict-type-checked'];
+const baseJsxA11yConfig = jsxA11yXPlugin.configs.strict;
 
 export default defineConfig([
   {
-    ...baseReactConfig,
-    files: matchingFilesPattern,
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    ...baseReactJsConfig,
+    files: [JS],
   },
   {
-    ...baseReactHooksConfig,
-    files: matchingFilesPattern,
+    ...baseReactTsConfig,
+    files: [TS],
   },
   {
     ...baseJsxA11yConfig,

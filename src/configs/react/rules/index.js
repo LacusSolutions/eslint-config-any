@@ -1,15 +1,11 @@
 export default {
-  // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/no-autofocus.md
-  'jsx-a11y/no-autofocus': 'off',
+  // https://github.com/es-tooling/eslint-plugin-jsx-a11y-x/blob/main/docs/rules/no-autofocus.md
+  'jsx-a11y-x/no-autofocus': 'off',
 
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
-  'react/jsx-boolean-value': ['warn', 'never'],
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md
-  'react/jsx-closing-bracket-location': ['warn', 'tag-aligned'],
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-curly-brace-presence.md
-  'react/jsx-curly-brace-presence': [
+  // https://eslint-react.xyz/docs/migrating-from-eslint-plugin-react
+  '@eslint-react/kit/jsx-boolean-value': ['warn', 'never'],
+  '@stylistic/jsx-closing-bracket-location': 'warn',
+  '@stylistic/jsx-curly-brace-presence': [
     'warn',
     {
       children: 'never',
@@ -17,34 +13,50 @@ export default {
       propElementValues: 'always',
     },
   ],
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-curly-spacing.md
-  'react/jsx-curly-spacing': [
+  '@stylistic/jsx-curly-spacing': [
     'warn',
     {
       when: 'never',
     },
   ],
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-equals-spacing.md
-  'react/jsx-equals-spacing': ['warn', 'never'],
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-filename-extension.md
-  'react/jsx-filename-extension': [
+  '@stylistic/jsx-equals-spacing': ['warn', 'never'],
+  '@stylistic/nonblock-statement-body-position': ['warn', 'beside'],
+  '@stylistic/padding-line-between-statements': [
     'error',
     {
-      allow: 'as-needed',
-      extensions: ['.jsx', '.mjsx', '.tsx', '.mtsx'],
-      ignoreFilesWithoutCode: true,
+      blankLine: 'always',
+      prev: '*',
+      next: 'return',
+    },
+    {
+      blankLine: 'always',
+      prev: '*',
+      next: ['if', 'while', 'do', 'switch', 'try'],
+    },
+    {
+      blankLine: 'always',
+      prev: ['if', 'while', 'do', 'switch', 'try'],
+      next: '*',
+    },
+    {
+      blankLine: 'always',
+      prev: { selector: 'ExpressionStatement:has(CallExpression)' },
+      next: ['const', 'let', 'var'],
+    },
+    {
+      blankLine: 'always',
+      prev: ['const', 'let', 'var'],
+      next: { selector: 'ExpressionStatement:has(CallExpression)' },
+    },
+    {
+      blankLine: 'always',
+      prev: '*',
+      next: ['class', 'enum', 'interface'],
+    },
+    {
+      blankLine: 'always',
+      prev: ['class', 'enum', 'interface'],
+      next: '*',
     },
   ],
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-uses-react.md
-  'react/jsx-uses-react': 'off',
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prop-types.md
-  'react/prop-types': 'off',
-
-  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/react-in-jsx-scope.md
-  'react/react-in-jsx-scope': 'off',
 };
