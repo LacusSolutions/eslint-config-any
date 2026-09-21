@@ -17,6 +17,12 @@ export default defineConfig([
   ...baseTypeScriptConfig,
   {
     files: matchingFilesPattern,
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        extraFileExtensions: ['.vue'],
+      },
+    },
     rules: {
       ...stylisticRules,
       ...rules,
