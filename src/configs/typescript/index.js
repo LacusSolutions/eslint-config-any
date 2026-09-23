@@ -1,26 +1,24 @@
 import { defineConfig } from 'eslint/config';
 import tsEslint from 'typescript-eslint';
 
-import { TS, VUE } from '../../utils/index.js';
+import { DTS, toBlob, TS, VUE } from '../../utils/index.js';
 import commonjs from '../env/commonjs/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [TS, VUE];
-const baseTypeScriptConfig = tsEslint.configs.recommended;
-const baseStylisticConfigRules = tsEslint.configs.stylistic.at(-1)?.rules ?? {};
-const stylisticRules = Object.keys(baseStylisticConfigRules).reduce((acc, rule) => {
-  acc[rule] = 'warn';
-  return acc;
-}, {});
+const matchingFileBlobs = toBlob(TS, DTS, VUE);
+const stylisticRules = Object.keys(tsEslint.configs.stylistic.at(-1)?.rules ?? {}).reduce(
+  (acc, rule) => ({ ...acc, [rule]: 'warn' }),
+  {},
+);
 
 export default defineConfig([
-  ...baseTypeScriptConfig,
+  ...tsEslint.configs.recommended,
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     languageOptions: {
       parserOptions: {
         projectService: true,
-        extraFileExtensions: ['.vue'],
+        extraFileExtensions: VUE.toDottedArray(),
       },
     },
     rules: {

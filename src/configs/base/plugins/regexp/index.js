@@ -1,19 +1,18 @@
 import { configs as regexpPluginConfigs } from 'eslint-plugin-regexp';
 import { defineConfig } from 'eslint/config';
 
-import { JS, TS, VUE } from '../../../../utils/index.js';
+import { DTS, JS, toBlob, TS, VUE } from '../../../../utils/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [JS, TS, VUE];
-const baseRegExpConfig = regexpPluginConfigs.recommended;
+const matchingFileBlobs = toBlob(JS, TS, DTS, VUE);
 
 export default defineConfig([
   {
-    ...baseRegExpConfig,
-    files: matchingFilesPattern,
-    rules: {
-      ...baseRegExpConfig.rules,
-      ...rules,
-    },
+    ...regexpPluginConfigs.recommended,
+    files: matchingFileBlobs,
+  },
+  {
+    files: matchingFileBlobs,
+    rules,
   },
 ]);

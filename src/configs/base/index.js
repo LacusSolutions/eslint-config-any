@@ -1,7 +1,7 @@
 import jsEslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 
-import { JS, TS, VUE } from '../../utils/index.js';
+import { DTS, JS, toBlob, TS, VUE } from '../../utils/index.js';
 import eslintCommentsConfigs from './plugins/@eslint-community___eslint-comments/index.js';
 import stylisticConfigs from './plugins/@stylistic/index.js';
 import arrayFuncConfigs from './plugins/array-func/index.js';
@@ -13,16 +13,15 @@ import perfectionistConfigs from './plugins/perfectionist/index.js';
 import regexpConfigs from './plugins/regexp/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [JS, TS, VUE];
-const baseJavaScriptConfig = jsEslint.configs.recommended;
+const matchingFileBlobs = toBlob(JS, TS, DTS, VUE);
 
 export default defineConfig([
   {
     ignores: ['**/coverage/**', '**/build/**', '**/dist/**', '**/*.min.js', '**/node_modules/**'],
   },
   {
-    ...baseJavaScriptConfig,
-    files: matchingFilesPattern,
+    ...jsEslint.configs.recommended,
+    files: matchingFileBlobs,
   },
   ...jsonConfigs,
   ...markdownConfigs,
@@ -34,7 +33,7 @@ export default defineConfig([
   ...regexpConfigs,
   ...stylisticConfigs,
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     rules,
   },
 ]);

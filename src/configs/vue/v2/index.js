@@ -5,17 +5,17 @@ import { VUE } from '../../../utils/index.js';
 import config from '../shared/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [VUE];
+const matchingFileBlobs = VUE.toBlobArray();
 const recommendedConfig = vuePlugin.configs['flat/vue2-recommended'].map((config) => ({
   ...config,
-  files: matchingFilesPattern,
+  files: matchingFileBlobs,
 }));
 
 export default defineConfig([
   ...recommendedConfig,
   ...config,
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     rules,
   },
 ]);

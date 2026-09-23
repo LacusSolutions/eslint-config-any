@@ -9,18 +9,18 @@ const baseJsonConfig = jsonEslint.configs.recommended;
 export default defineConfig([
   {
     ...baseJsonConfig,
-    files: [JSON],
+    files: JSON.toBlobArray(),
     ignores: ['package-lock.json'],
     language: 'json/json',
   },
   {
     ...baseJsonConfig,
-    files: [JSONC],
+    files: JSONC.toBlobArray(),
     language: 'json/jsonc',
   },
   {
     ...baseJsonConfig,
-    files: [JSON5],
+    files: JSON5.toBlobArray(),
     language: 'json/json5',
   },
 ]);

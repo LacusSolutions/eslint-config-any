@@ -1,1 +1,1 @@
-export * from './files.js';
+export * from './extensions/index.js';

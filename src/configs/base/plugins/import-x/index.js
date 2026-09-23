@@ -1,14 +1,14 @@
 import { importX } from 'eslint-plugin-import-x';
 import { defineConfig } from 'eslint/config';
 
-import { JS, TS, VUE } from '../../../../utils/index.js';
+import { DTS, JS, toBlob, toDotted, TS, VUE } from '../../../../utils/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [JS, TS, VUE];
+const matchingFileBlobs = toBlob(JS, TS, DTS, VUE);
 
 export default defineConfig([
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     plugins: {
       'import-x': importX,
     },

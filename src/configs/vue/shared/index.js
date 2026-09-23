@@ -5,11 +5,11 @@ import tsEslint from 'typescript-eslint';
 import { VUE } from '../../../utils/index.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [VUE];
+const matchingFileBlobs = VUE.toBlobArray();
 
 export default defineConfig([
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     languageOptions: {
       globals: globals.browser,
       parserOptions: {

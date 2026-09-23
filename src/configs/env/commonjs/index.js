@@ -1,12 +1,12 @@
 import { defineConfig } from 'eslint/config';
 
-import { CJS } from '../../../utils/index.js';
+import { CJS, toBlob } from '../../../utils/index.js';
 
-const matchingFilesPattern = [CJS];
+const matchingFileBlobs = toBlob(CJS);
 
 export default defineConfig([
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     languageOptions: {
       sourceType: 'commonjs',
     },

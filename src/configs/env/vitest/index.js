@@ -1,13 +1,13 @@
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 
-import { TEST } from '../../../utils/index.js';
+import { TEST, toBlob } from '../../../utils/index.js';
 
-const matchingFilesPattern = [TEST];
+const matchingFileBlobs = toBlob(TEST);
 
 export default defineConfig([
   {
-    files: matchingFilesPattern,
+    files: matchingFileBlobs,
     languageOptions: {
       globals: globals.jest,
     },
