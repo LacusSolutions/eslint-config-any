@@ -1,12 +1,13 @@
 /**
- * @import { RuleFunction } from '@eslint-react/kit'
+ * @typedef {import('@eslint-react/kit').RuleFunction} RuleFunction
  */
 
 /**
- * Enforce shorthand for boolean JSX attributes (`disabled` over `disabled={true}`).
+ * Enforce shorthand for boolean JSX attributes (`disabled` over
+ * `disabled={true}`).
  *
- * @see https://eslint-react.xyz/docs/migrating-from-eslint-plugin-react#jsx-boolean-value
  * @returns {RuleFunction}
+ * @see https://eslint-react.xyz/docs/migrating-from-eslint-plugin-react#jsx-boolean-value
  */
 export function jsxBooleanValue() {
   return (context, { ast }) => ({
