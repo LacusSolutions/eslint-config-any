@@ -8,32 +8,30 @@ import { JS, TS } from '../../utils/index.js';
 import { jsxBooleanValue } from './kit/jsx-boolean-value.js';
 import rules from './rules/index.js';
 
-const matchingFilesPattern = [JS, TS];
-const baseReactJsConfig = reactPlugin.configs.strict;
-const baseReactTsConfig = reactPlugin.configs['strict-type-checked'];
-const baseJsxA11yConfig = jsxA11yXPlugin.configs.strict;
-const eslintReactKitPlugin = eslintReactKit().use(jsxBooleanValue).getPlugin();
+const matchingJsFileBlobs = JS.toBlobArray();
+const matchingTsFileBlobs = TS.toBlobArray();
+const matchingAllFileBlobs = [...matchingJsFileBlobs, ...matchingTsFileBlobs];
 
 export default defineConfig([
   {
-    ...baseReactJsConfig,
-    files: [JS],
+    ...reactPlugin.configs.strict,
+    files: matchingJsFileBlobs,
   },
   {
-    ...baseReactTsConfig,
-    files: [TS],
+    ...reactPlugin.configs['strict-type-checked'],
+    files: matchingTsFileBlobs,
   },
   {
-    ...baseJsxA11yConfig,
-    files: matchingFilesPattern,
+    ...jsxA11yXPlugin.configs.strict,
+    files: matchingAllFileBlobs,
   },
   {
-    files: matchingFilesPattern,
+    files: matchingAllFileBlobs,
     languageOptions: {
       globals: globals.browser,
     },
     plugins: {
-      '@eslint-react/kit': eslintReactKitPlugin,
+      '@eslint-react/kit': eslintReactKit().use(jsxBooleanValue).getPlugin(),
     },
     rules,
   },
