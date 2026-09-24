@@ -1,6 +1,6 @@
 export default {
   // https://eslint.org/docs/rules/eqeqeq
-  eqeqeq: 'error',
+  'eqeqeq': 'error',
 
   // https://eslint.org/docs/rules/func-style
   'func-style': [
