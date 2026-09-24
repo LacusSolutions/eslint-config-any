@@ -42,6 +42,9 @@ export default {
     },
   ],
 
+  // https://eslint.org/docs/rules/no-void
+  'no-void': 'error',
+
   // https://eslint.org/docs/rules/object-shorthand
   'object-shorthand': 'warn',
 
