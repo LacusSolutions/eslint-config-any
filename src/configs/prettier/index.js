@@ -17,6 +17,7 @@ export default defineConfig([
           jsdocDescriptionWithDot: true,
           jsdocPrintWidth: 80,
           printWidth: 100,
+          quoteProps: 'consistent',
           singleQuote: true,
         },
       ],
