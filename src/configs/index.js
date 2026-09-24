@@ -1,5 +1,6 @@
 import jsConfigs from './base/index.js';
 import envConfigs from './env/index.js';
+import nextConfigs from './next/index.js';
 import prettierConfigs from './prettier/index.js';
 import reactConfigs from './react/index.js';
 import tsConfigs from './typescript/index.js';
@@ -16,6 +17,7 @@ import vueConfigs from './vue/index.js';
  * @property {EslintFlatConfig} browser
  * @property {EslintFlatConfig} sharedNodeAndBrowser
  * @property {EslintFlatConfig} react
+ * @property {EslintFlatConfig} next
  * @property {EslintFlatConfig} vue
  * @property {EslintFlatConfig} vue2
  */
@@ -39,6 +41,7 @@ export default {
   browser: mergeConfigs(envConfigs.browser),
   sharedNodeAndBrowser: mergeConfigs(envConfigs.sharedNodeAndBrowser),
   react: mergeConfigs(reactConfigs),
+  next: mergeConfigs(nextConfigs),
   vue: mergeConfigs(vueConfigs.vue3),
   vue2: mergeConfigs(vueConfigs.vue2),
 };

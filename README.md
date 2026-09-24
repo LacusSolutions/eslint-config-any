@@ -6,7 +6,7 @@
 ![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/eslint-config-any)
 ![Project License](https://img.shields.io/github/license/LacusSolutions/eslint-config-any)
 
-This package provides strict linting and formatting rules for (almost) all sorts of JavaScript stack projects, like React, Vue, Vanilla, Node and their variants in TypeScript.
+This package provides strict linting and formatting rules for (almost) all sorts of JavaScript stack projects, like React, Next.js, Vue, Vanilla, Node and their variants in TypeScript.
 
 Requires **ESLint 10+** and **Node 22+**.
 
@@ -48,6 +48,7 @@ So you'll' just need to select one generalized preset and make small composition
 The current presets available are:
 
 - `react`: for React projects, adding support not only for basic JS files but also TS, JSX and TSX extensions, as well as providing browser's global variables.
+- `next`: for Next.js projects. Includes the full `react` stack plus `@next/eslint-plugin-next` (`core-web-vitals`). **Don't select both `react` and `next`, as they overlap**.
 - `vue`: for Vue 3 projects, adding support not only for basic JS files but also TS and VUE extensions, as well as providing browser's global variables.
 - `vue2`: similar to `vue` option, except it contains some specific rules for Vue v2 only. **Don't select both presets, as they may conflict with each other**.
 - `browser`: if your project does not use nay of the previous frameworks and is meant to run in the client-side, that's the one to go with. It lints files with JS and TS extensions and provides browser's global variables.
@@ -80,7 +81,9 @@ export default [
 ];
 ```
 
-React/import/a11y overrides use `@eslint-react/*`, `import-x/*`, and `jsx-a11y-x/*` (not `react/*`, `react-hooks/*`, `import/*`, or `jsx-a11y/*`).
+React/import/a11y/Next overrides use `@eslint-react/*`, `import-x/*`, `jsx-a11y-x/*`, and `@next/next/*` (not `react/*`, `react-hooks/*`, `import/*`, or `jsx-a11y/*`).
+
+If the Next app is not at the ESLint cwd (monorepo), set `settings.next.rootDir` in your config.
 
 ## ESLint 10 notes
 
@@ -90,7 +93,7 @@ React/import/a11y overrides use `@eslint-react/*`, `import-x/*`, and `jsx-a11y-x
 - `.eslintignore` is gone; if you need gitignore-driven ignores, use `includeIgnoreFile()` from `eslint/config` in **your** config.
 - JSX components count as variable references (`no-unused-vars` / `no-undef`).
 - `no-shadow-restricted-names` reports `globalThis` by default.
-- React rules are `@eslint-react/*`, not `react/*` / `react-hooks/*`. Import rules are `import-x/*`, not `import/*`. A11y rules are `jsx-a11y-x/*`.
+- React rules are `@eslint-react/*`, not `react/*` / `react-hooks/*`. Import rules are `import-x/*`, not `import/*`. A11y rules are `jsx-a11y-x/*`. Next.js rules are `@next/next/*`.
 - `import-x/extensions` omits JS/TS/Vue extensions. That fights `moduleResolution: "node16"` / `"nodenext"` (TypeScript requires `.js` in import specifiers). Override to `'off'` or `'always'` in that case.
 - On `*.ts` / `*.vue`, `import-x/named`, `namespace`, `default`, `no-unresolved`, and `no-named-as-default-member` are off — `tsc` already covers them.
 

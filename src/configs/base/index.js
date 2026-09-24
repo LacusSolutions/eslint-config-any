@@ -17,7 +17,16 @@ const matchingFileBlobs = toBlob(JS, TS, DTS, VUE);
 
 export default defineConfig([
   {
-    ignores: ['**/coverage/**', '**/build/**', '**/dist/**', '**/*.min.js', '**/node_modules/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/build/**',
+      '**/dist/**',
+      '**/out/**',
+      '**/coverage/**',
+      '**/*.min.js',
+      '**/.next/**',
+      '**/next-env.d.ts',
+    ],
   },
   {
     ...jsEslint.configs.recommended,
