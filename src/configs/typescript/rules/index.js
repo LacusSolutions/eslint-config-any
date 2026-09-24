@@ -1,6 +1,14 @@
 import standardRules from '../../base/rules/index.js';
 
 export default {
+  // https://typescript-eslint.io/rules/array-type
+  '@typescript-eslint/array-type': [
+    'warn',
+    {
+      default: 'array-simple',
+    },
+  ],
+
   // https://typescript-eslint.io/rules/consistent-type-imports
   '@typescript-eslint/consistent-type-imports': [
     'warn',
