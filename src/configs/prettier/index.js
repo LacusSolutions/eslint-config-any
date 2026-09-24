@@ -13,6 +13,7 @@ export default defineConfig([
         'warn',
         {
           plugins: [prettierPluginJsdocPath],
+          experimentalOperatorPosition: 'start',
           jsdocCommentLineStrategy: 'multiline',
           jsdocDescriptionWithDot: true,
           jsdocPrintWidth: 80,
