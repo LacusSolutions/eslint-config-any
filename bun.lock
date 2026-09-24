@@ -5,27 +5,27 @@
     "": {
       "name": "eslint-config-jlm",
       "dependencies": {
-        "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
-        "@eslint-react/eslint-plugin": "^5.20.8",
-        "@eslint-react/kit": "^5.20.8",
+        "@eslint-community/eslint-plugin-eslint-comments": "~4.8.1",
+        "@eslint-react/eslint-plugin": "~5.20.8",
+        "@eslint-react/kit": "~5.20.8",
         "@eslint/js": "^10.0.1",
-        "@eslint/json": "^2.1.0",
-        "@eslint/markdown": "^8.0.3",
-        "@next/eslint-plugin-next": "^16.3.6",
-        "@stylistic/eslint-plugin": "^5.10.0",
+        "@eslint/json": "~2.1.0",
+        "@eslint/markdown": "~8.0.3",
+        "@next/eslint-plugin-next": "~16.3.6",
+        "@stylistic/eslint-plugin": "~5.10.0",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-array-func": "^5.1.1",
-        "eslint-plugin-import-helpers": "^2.0.2",
-        "eslint-plugin-import-x": "^4.17.1",
-        "eslint-plugin-jsx-a11y-x": "^0.2.0",
-        "eslint-plugin-perfectionist": "^5.12.1",
+        "eslint-plugin-array-func": "~5.1.1",
+        "eslint-plugin-import-helpers": "~2.0.2",
+        "eslint-plugin-import-x": "~4.17.1",
+        "eslint-plugin-jsx-a11y-x": "~0.2.0",
+        "eslint-plugin-perfectionist": "~5.12.1",
         "eslint-plugin-prettier": "^5.5.6",
-        "eslint-plugin-regexp": "^3.3.1",
-        "eslint-plugin-vue": "^10.11.1",
+        "eslint-plugin-regexp": "~3.3.1",
+        "eslint-plugin-vue": "~10.11.1",
         "globals": "^17.12.0",
-        "prettier": "^3.9.9",
-        "prettier-plugin-jsdoc": "^1.8.1",
-        "typescript-eslint": "^8.70.1",
+        "prettier": "~3.9.9",
+        "prettier-plugin-jsdoc": "~1.8.1",
+        "typescript-eslint": "~8.70.1",
         "vue-eslint-parser": "^10.4.1",
       },
       "devDependencies": {
@@ -37,11 +37,17 @@
         "eslint": "^10.11.0",
         "husky": "^9.1.7",
         "lint-staged": "^16.4.0",
+        "typescript": "~6.0.3",
       },
       "peerDependencies": {
-        "eslint": "^10.3.0 <11.0.0",
+        "eslint": "^10.3.0",
+        "next": "^16.0.0",
         "typescript": ">=5.8.0 <6.1.0",
       },
+      "optionalPeers": [
+        "next",
+        "typescript",
+      ],
     },
   },
   "packages": {
@@ -861,7 +867,7 @@
 
     "type-fest": ["type-fest@0.21.3", "", {}, "sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w=="],
 
-    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+    "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
 
     "typescript-eslint": ["typescript-eslint@8.70.1", "", { "dependencies": { "@typescript-eslint/eslint-plugin": "8.70.1", "@typescript-eslint/parser": "8.70.1", "@typescript-eslint/typescript-estree": "8.70.1", "@typescript-eslint/utils": "8.70.1" }, "peerDependencies": { "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0", "typescript": ">=4.8.4 <6.1.0" } }, "sha512-AcWG7KDjZ2THNXsgwttMaGmzVi0VFRlFYfqFHYQRbDpF3owuYbuiL8c7UUrd2k8s3PoSfIQrWfrGXfcElrWLYA=="],
 
@@ -929,7 +935,7 @@
 
     "chalk/escape-string-regexp": ["escape-string-regexp@1.0.5", "", {}, "sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg=="],
 
-    "cli-truncate/string-width": ["string-width@8.2.2", "", { "dependencies": { "get-east-asian-width": "^1.5.0", "strip-ansi": "^7.1.2" } }, "sha512-GaPUh5gfdrYzqeVNZvUfT23vYYxXzKYidUcnMtJg/3rxRV63EFZy3k6xfKlmfeJD0176lnUV/Usr3XcwSvFzpg=="],
+    "cli-truncate/string-width": ["string-width@8.3.0", "", { "dependencies": { "get-east-asian-width": "^1.5.0", "strip-ansi": "^7.1.2" } }, "sha512-ZbmZM0JCihQN91dWnxoipT2KOEyHqEyfRXUyjuRhW8b/xnqPDoq4gWEVApTVa9db2wN8mmoikgFBbjh71+cGeQ=="],
 
     "cliui/wrap-ansi": ["wrap-ansi@7.0.0", "", { "dependencies": { "ansi-styles": "^4.0.0", "string-width": "^4.1.0", "strip-ansi": "^6.0.0" } }, "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="],
 
