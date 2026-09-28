@@ -18,11 +18,10 @@ permissions:
 env:
   HUSKY: 0
   NODE_VERSION: 24
+  NPM_REGISTRY_URL: https://registry.npmjs.org/
   BUN_VERSION: latest
   BUN_LOCKFILE: bun.lock
   BUN_CACHE_PATH: ~/.bun/install/cache
-  BUN_CACHE_KEY_PREFIX: ${{ runner.os }}-bun-
-  NPM_REGISTRY_URL: https://registry.npmjs.org/
 
 jobs:
   lint:
@@ -33,13 +32,14 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: ${{ env.BUN_VERSION }}
+
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9# v6.1.0
         with:
           path: ${{ env.BUN_CACHE_PATH }}
-          key: ${{ env.BUN_CACHE_KEY_PREFIX }}${{ hashFiles(env.BUN_LOCKFILE) }}
-          restore-keys: ${{ env.BUN_CACHE_KEY_PREFIX }}
-
+          key: ${{ runner.os }}-bun-${{ hashFiles(env.BUN_LOCKFILE) }}
+          restore-keys: ${{ runner.os }}-bun-
       - run: bun install --frozen-lockfile
+
       - run: bun run lint
 
   publish-mock:
@@ -47,18 +47,19 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: ${{ env.BUN_VERSION }}
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: ${{ env.NPM_REGISTRY_URL }}
+          registry-url: ${{ env.NPM_REGISTRY_URL }}ore-keys: ${{ runner.os }}-bun-
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9# v6.1.0
         with:
           path: ${{ env.BUN_CACHE_PATH }}
-          key: ${{ env.BUN_CACHE_KEY_PREFIX }}${{ hashFiles(env.BUN_LOCKFILE) }}
-          restore-keys: ${{ env.BUN_CACHE_KEY_PREFIX }}
-
+          key: ${{ runner.os }}-bun-${{ hashFiles(env.BUN_LOCKFILE) }}
+          restore-keys: ${{ runner.os }}-bun-
       - run: bun install --frozen-lockfile
+
       - run: npm publish --dry-run
