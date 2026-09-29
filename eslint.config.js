@@ -1,9 +1,9 @@
 import { defineConfig } from 'eslint/config';
 
-import jlmConfig from './dist/index.js';
+import { node } from './dist/index.js';
 
 export default defineConfig([
-  ...jlmConfig.node,
+  ...node(),
   {
     rules: {
       'import-x/extensions': [

@@ -1,1 +1,2 @@
-export { default } from '../src/configs/index.js';
+export { default } from '../src/index.js';
+export * from '../src/index.js';

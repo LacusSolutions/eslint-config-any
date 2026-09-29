@@ -1,25 +1,17 @@
 import browser from './browser.js';
 import commonjs from './commonjs.js';
 import jest from './jest.js';
-import next from './next.js';
 import node from './node.js';
-import react from './react.js';
 import sharedNodeAndBrowser from './sharedNodeAndBrowser.js';
 import vitest from './vitest.js';
-import vue from './vue.js';
-import vue2 from './vue2.js';
 
-export { browser, commonjs, jest, next, node, react, sharedNodeAndBrowser, vitest, vue, vue2 };
+export { browser, commonjs, jest, node, sharedNodeAndBrowser, vitest };
 
 export default {
   browser,
   commonjs,
   jest,
-  next,
   node,
-  react,
   sharedNodeAndBrowser,
   vitest,
-  vue,
-  vue2,
 };
