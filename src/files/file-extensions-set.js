@@ -59,7 +59,7 @@ export class FileExtensionsSet extends Set {
    * @param {(extensions: string[]) => string} [callback]
    * @returns {string}
    */
-  toBlob(callback) {
+  toGlob(callback) {
     const extensions = this.toArray();
 
     if (callback) {
@@ -81,7 +81,7 @@ export class FileExtensionsSet extends Set {
    * @param {(extension: string) => string} [callback]
    * @returns {string[]}
    */
-  toBlobArray(callback = (extension) => `**/*.${extension}`) {
+  toGlobArray(callback = (extension) => `**/*.${extension}`) {
     return this.toArray().map(callback);
   }
 }

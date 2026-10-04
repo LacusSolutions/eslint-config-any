@@ -6,8 +6,8 @@
  * @param {...FileExtensionsSet} sets
  * @returns {string[]}
  */
-export function toBlob(...sets) {
-  return sets.map((set) => set.toBlob());
+export function toGlob(...sets) {
+  return sets.map((set) => set.toGlob());
 }
 
 /**
